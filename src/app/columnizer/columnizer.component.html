@@ -1,0 +1,9 @@
+<div class="columns-container">
+  <div *ngFor="let c of columns" class="columns-item">
+    <app-column-setting [column]="c.column" (columnChange)="updateColumn(c.column, $event)" [pathInfo]="c.pathInfo" (remove)="removeColumn(c.column)"></app-column-setting>
+  </div>
+</div>
+
+
+
+<app-path-selector [paths]="paths" (selected)="addColumn($event)"></app-path-selector>

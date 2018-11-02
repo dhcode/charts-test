@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Settings</h2>
+<mat-dialog-content>
+
+  <mat-form-field class="full-width">
+    <input matInput type="text" placeholder="Prefix" [(ngModel)]="options.prefix" [maxlength]="10">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput type="text" placeholder="Suffix" [(ngModel)]="options.suffix" [maxlength]="10">
+  </mat-form-field>
+
+  <ng-container *ngIf="column.format === 'number'">
+
+    <mat-checkbox class="full-width" [(ngModel)]="options.useGrouping">Use grouping</mat-checkbox>
+
+    <mat-form-field class="full-width">
+      <input matInput type="number" placeholder="Minimum Integer Digits" [(ngModel)]="options.minimumIntegerDigits" [min]="1" [max]="6">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput type="number" placeholder="Minimum Fraction Digits" [(ngModel)]="options.minimumFractionDigits" [min]="0" [max]="6">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput type="number" placeholder="Maximum Fraction Digits" [(ngModel)]="options.maximumFractionDigits" [min]="0" [max]="6">
+    </mat-form-field>
+
+  </ng-container>
+
+  <ng-container *ngIf="column.format === 'boolean'">
+    <mat-form-field class="full-width">
+      <input matInput type="text" placeholder="Label for true values" [(ngModel)]="options.trueLabel" [maxlength]="10">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput type="text" placeholder="Label for false values" [(ngModel)]="options.falseLabel" [maxlength]="10">
+    </mat-form-field>
+  </ng-container>
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="save()">Save</button>
+</mat-dialog-actions>

@@ -1,0 +1,4 @@
+<div *ngFor="let path of paths">
+  <a href="javascript:" (click)="select(path)">{{path.path}}</a>
+  <span *ngFor="let type of path.types">&nbsp;{{type}}</span>
+</div>
