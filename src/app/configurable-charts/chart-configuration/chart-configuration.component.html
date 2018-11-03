@@ -1,0 +1,9 @@
+<app-columnizer [data]="data" [config]="config" (configChange)="updateConfig($event)"></app-columnizer>
+
+<mat-button-toggle-group [value]="config.type" (valueChange)="updateChartType($event)">
+  <mat-button-toggle *ngFor="let ct of chartTypes" [value]="ct.type">
+    {{ct.label}}
+  </mat-button-toggle>
+</mat-button-toggle-group>
+
+<app-configured-chart [config]="config" [data]="data"></app-configured-chart>

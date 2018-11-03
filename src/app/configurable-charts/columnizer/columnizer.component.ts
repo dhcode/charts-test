@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { ChartConfig, ColumnConfig, getDefaultFormatOptions, getBestFormatByTypes } from '../utils/chart-config';
+import { ChartConfig, ColumnConfig, getBestFormatByTypes, getDefaultFormatOptions } from '../utils/chart-config';
 import { identifyPathsInArray, PathInfo } from '../utils/path-info';
 import { getPrimaryDataType } from '../utils/chart-data-formatter';
 
@@ -14,17 +13,13 @@ interface ColumnWithPathInfo {
   templateUrl: './columnizer.component.html',
   styleUrls: ['./columnizer.component.scss']
 })
-export class ColumnizerComponent implements OnInit, OnChanges {
+export class ColumnizerComponent implements OnChanges {
 
-  @Input() source: Observable<any[]>;
+  @Input() data: any[];
 
   @Input() config: ChartConfig;
 
   @Output() configChange = new EventEmitter<ChartConfig>();
-
-  private subscription: Subscription;
-
-  private data: any[];
 
   paths: PathInfo[];
 
@@ -33,19 +28,13 @@ export class ColumnizerComponent implements OnInit, OnChanges {
   constructor() {
   }
 
-  ngOnInit() {
-    if (!this.config) {
-      this.config = {rev: 1, columns: [], type: null};
-      this.loadColumns();
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.config && changes.config.currentValue) {
       this.loadConfig(changes.config.currentValue);
     }
-    if (changes.source && changes.source.currentValue) {
-      this.loadSource(changes.source.currentValue);
+    if (changes.data && changes.data.currentValue) {
+      this.paths = identifyPathsInArray(changes.data.currentValue);
+      this.loadColumns();
     }
   }
 
@@ -63,18 +52,6 @@ export class ColumnizerComponent implements OnInit, OnChanges {
       const pathInfo = this.paths.find(p => p.path === column.path);
       return {column: column, pathInfo: pathInfo};
     });
-  }
-
-  loadSource(source: Observable<any[]>) {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.subscription = source.subscribe(result => {
-      this.data = result;
-      this.paths = identifyPathsInArray(result);
-      this.loadColumns();
-    });
-
   }
 
   addColumn(pathInfo: PathInfo) {

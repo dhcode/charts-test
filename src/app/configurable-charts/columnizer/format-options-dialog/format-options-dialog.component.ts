@@ -10,8 +10,6 @@ import { ColumnConfig } from '../../utils/chart-config';
 })
 export class FormatOptionsDialogComponent implements OnInit {
 
-  column: ColumnConfig;
-
   options: OutputFormatOptions;
 
   constructor(public dialogRef: MatDialogRef<FormatOptionsDialogComponent>,

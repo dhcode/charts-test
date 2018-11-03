@@ -2,14 +2,14 @@ import { PathInfo, PathType } from './path-info';
 import {
   BooleanDataFormatter,
   ChartDataFormatter,
-  DatetimeDataFormatter, getPrimaryDataType,
+  DatetimeDataFormatter,
+  getPrimaryDataType,
   NumberDataFormatter,
   OutputFormat,
   OutputFormatOptions,
   StringDataFormatter
 } from './chart-data-formatter';
-
-export type ChartTypes = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
+import { ChartType, ChartTypeOptions } from './chart-types';
 
 export const outputFormatters: ChartDataFormatter[] = [
   new StringDataFormatter(),
@@ -26,8 +26,13 @@ export interface ChartConfig {
   /**
    * If null, no chart type has been set yet
    */
-  type: ChartTypes | null;
+  type: ChartType | null;
   columns: ColumnConfig[];
+
+  /**
+   * Chart type specific configuration options
+   */
+  chartOptions: ChartTypeOptions;
 }
 
 export interface ColumnConfig {
@@ -46,7 +51,7 @@ export interface ColumnConfig {
   /**
    * if this should not be rendered as default chart type
    */
-  chartType?: ChartTypes;
+  chartType?: ChartType;
   axis: 'x' | 'y' | 'y2';
   color?: string;
 }

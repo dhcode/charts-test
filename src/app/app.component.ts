@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'charts-test';
-  source = of(generateData(100));
+  data = generateData(100);
 
   ngOnInit(): void {
   }
