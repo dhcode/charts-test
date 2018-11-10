@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PathInfo } from '../../utils/path-info';
+import { PathInfo } from '../../lib/models/path-info';
 
 @Component({
   selector: 'app-path-selector',

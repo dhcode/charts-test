@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { ChartConfig } from '../utils/chart-config';
+import { ChartConfig } from '../lib/models/chart-config';
 import * as c3 from 'c3';
-import { ChartTypeConfigurer, getChartTypeConfigurer } from '../utils/chart-types';
+import { ChartTypeConfigurer} from '../lib/models/chart-types';
 import { ChartAPI } from 'c3';
+import { getChartTypeConfigurer } from '../lib/chart-configurers/index';
 
 @Component({
   selector: 'app-configured-chart',

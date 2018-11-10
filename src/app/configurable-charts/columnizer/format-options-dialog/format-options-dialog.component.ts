@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { OutputFormatOptions } from '../../utils/chart-data-formatter';
-import { ColumnConfig } from '../../utils/chart-config';
+import { OutputFormatOptions } from '../../lib/models/data-formatter';
+import { ColumnConfig } from '../../lib/models/chart-config';
 
 @Component({
   selector: 'app-format-options-dialog',

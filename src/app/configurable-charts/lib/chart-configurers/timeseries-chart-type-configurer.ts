@@ -1,44 +1,8 @@
+import { ColumnConfig } from '../models/chart-config';
 import { ChartConfiguration } from 'c3';
-import { ColumnConfig, outputFormatters } from './chart-config';
-import { ChartDataFormatter } from './chart-data-formatter';
-
-export type ChartType = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
-
-export interface ChartTypeOptions {
-  [key: string]: any;
-}
-
-export interface ChartTypeConfigurer {
-  /**
-   * Identifier of the chart type
-   */
-  type: ChartType;
-  /**
-   * Label which is displayed for the user when selecting the chart type
-   */
-  label: string;
-
-  /**
-   * Whether the columns fulfill the requirements to use this chart type
-   */
-  isAvailable(columns: ColumnConfig[]): boolean;
-
-  /**
-   * Generate the default options for this chart type
-   */
-  getDefaultOptions(columns: ColumnConfig[]): ChartTypeOptions;
-
-  /**
-   * Create the config for c3
-   */
-  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): ChartConfiguration;
-
-  /**
-   * Creates the data to load in the chart
-   */
-  createDataConfig(columns: ColumnConfig[], options: ChartTypeOptions, data: any[]): any;
-}
-
+import { getValueByPath } from '../chart-type-utils';
+import { ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
+import { getFormatter } from '../chart-data-formatters';
 
 export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
   type: ChartType = 'timeseries';
@@ -123,31 +87,4 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
   }
 
 
-}
-
-export const chartTypeConfigurers = [
-  new TimeseriesChartTypeConfigurer()
-];
-
-export function getAvailableChartTypes(columns: ColumnConfig[]): ChartTypeConfigurer[] {
-  return chartTypeConfigurers.filter(c => c.isAvailable(columns));
-}
-
-export function getChartTypeConfigurer(type: ChartType): ChartTypeConfigurer {
-  return chartTypeConfigurers.find(c => c.type === type);
-}
-
-function getFormatter(column: ColumnConfig): ChartDataFormatter {
-  return outputFormatters.find(f => f.format === column.format);
-}
-
-function getValueByPath(data: any, path: string[]) {
-  if (!path.length) {
-    return data;
-  }
-  const key = path[0];
-  if (data && data.hasOwnProperty(key)) {
-    return getValueByPath(data[key], path.slice(1));
-  }
-  return undefined;
 }

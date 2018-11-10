@@ -1,18 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import {
-  ColumnConfig,
-  getBestFormatByTypes,
-  getDefaultFormatOptions,
-  getFormattersByTypes,
-  outputFormatters
-} from '../../utils/chart-config';
-import { PathInfo, PathType } from '../../utils/path-info';
-import { ChartDataFormatter, getPrimaryDataType, OutputFormat } from '../../utils/chart-data-formatter';
+  ColumnConfig} from '../../lib/models/chart-config';
+import { PathInfo, PathType } from '../../lib/models/path-info';
+import { getPrimaryDataType, outputFormatters } from '../../lib/chart-data-formatters';
 import { MatDialog } from '@angular/material';
 import { FormatOptionsDialogComponent } from '../format-options-dialog/format-options-dialog.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Overlay, RepositionScrollStrategy } from '@angular/cdk/overlay';
+import { ChartDataFormatter, OutputFormat } from '../../lib/models/data-formatter';
+import { getBestFormatByTypes, getDefaultFormatOptions, getFormattersByTypes } from '../../lib/chart-config-utils';
 
 // 'string' | 'number' | 'boolean' | 'null' | 'array' | 'object' | 'bigint' | 'function' | 'symbol'
 export interface PathTypeInfo {

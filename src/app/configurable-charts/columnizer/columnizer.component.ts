@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ChartConfig, ColumnConfig, getBestFormatByTypes, getDefaultFormatOptions } from '../utils/chart-config';
-import { identifyPathsInArray, PathInfo } from '../utils/path-info';
-import { getPrimaryDataType } from '../utils/chart-data-formatter';
+import { ChartConfig, ColumnConfig} from '../lib/models/chart-config';
+import { PathInfo } from '../lib/models/path-info';
+import { getPrimaryDataType } from '../lib/chart-data-formatters';
+import { identifyPathsInArray } from '../lib/path-utils';
+import { getBestFormatByTypes, getDefaultFormatOptions } from '../lib/chart-config-utils';
 
 interface ColumnWithPathInfo {
   column: ColumnConfig;

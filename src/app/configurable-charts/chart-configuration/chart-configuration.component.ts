@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ChartConfig } from '../utils/chart-config';
-import { ChartType, ChartTypeConfigurer, getAvailableChartTypes } from '../utils/chart-types';
+import { ChartConfig } from '../lib/models/chart-config';
+import { ChartType, ChartTypeConfigurer} from '../lib/models/chart-types';
+import { getAvailableChartTypes } from '../lib/chart-configurers/index';
 
 @Component({
   selector: 'app-chart-configuration',

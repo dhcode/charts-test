@@ -1,11 +1,6 @@
-export type PathType = 'string' | 'number' | 'boolean' | 'null' | 'array' | 'object' | 'bigint' | 'function' | 'symbol';
-const basicTypeOfTypes = ['string', 'number', 'boolean', 'bigint', 'function', 'symbol'];
+import { PathInfo, PathType } from './models/path-info';
 
-export interface PathInfo {
-  path: string;
-  types: PathType[];
-  values?: any[];
-}
+const basicTypeOfTypes = ['string', 'number', 'boolean', 'bigint', 'function', 'symbol'];
 
 interface ScanContext {
   path: string[];

@@ -1,60 +1,6 @@
-import { PathInfo, PathType } from './path-info';
-import {
-  BooleanDataFormatter,
-  ChartDataFormatter,
-  DatetimeDataFormatter,
-  getPrimaryDataType,
-  NumberDataFormatter,
-  OutputFormat,
-  OutputFormatOptions,
-  StringDataFormatter
-} from './chart-data-formatter';
-import { ChartType, ChartTypeOptions } from './chart-types';
-
-export const outputFormatters: ChartDataFormatter[] = [
-  new StringDataFormatter(),
-  new DatetimeDataFormatter(),
-  new NumberDataFormatter(),
-  new BooleanDataFormatter()
-];
-
-export interface ChartConfig {
-  /**
-   * Revision number of the configuration format
-   */
-  rev: number;
-  /**
-   * If null, no chart type has been set yet
-   */
-  type: ChartType | null;
-  columns: ColumnConfig[];
-
-  /**
-   * Chart type specific configuration options
-   */
-  chartOptions: ChartTypeOptions;
-}
-
-export interface ColumnConfig {
-  label: string;
-  /**
-   * Whether the column should be used in the chart
-   */
-  active: boolean;
-  /**
-   * Source type
-   */
-  type: PathType;
-  path: string;
-  format: OutputFormat;
-  formatOptions: OutputFormatOptions;
-  /**
-   * if this should not be rendered as default chart type
-   */
-  chartType?: ChartType;
-  axis: 'x' | 'y' | 'y2';
-  color?: string;
-}
+import { ChartDataFormatter, OutputFormat, OutputFormatOptions } from './models/data-formatter';
+import { PathInfo, PathType } from './models/path-info';
+import { getPrimaryDataType, outputFormatters } from './chart-data-formatters';
 
 interface FormatterWithPriority {
   format: OutputFormat;
@@ -89,4 +35,3 @@ export function getBestFormatByTypes(pathInfo: PathInfo): OutputFormat {
 export function getDefaultFormatOptions(format: OutputFormat, values: any[]): OutputFormatOptions {
   return outputFormatters.find(f => f.format === format).getDefaultFormatOptions(values);
 }
-

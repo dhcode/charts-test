@@ -1,44 +1,7 @@
-import { PathInfo, PathType } from './path-info';
+import { PathInfo, PathType } from './models/path-info';
+import { ChartDataFormatter, OutputFormat, OutputFormatOptions } from './models/data-formatter';
+import { ColumnConfig } from './models/chart-config';
 
-
-export type OutputFormat = 'string' | 'datetime' | 'number' | 'boolean' | 'coordinate';
-
-export interface OutputFormatOptions {
-  [key: string]: any;
-}
-
-export interface ChartDataFormatter {
-  /**
-   * Identifier of the format
-   */
-  format: OutputFormat;
-
-  /**
-   * The label is used to represent the format to the user
-   */
-  label: string;
-
-  /**
-   * Returns null if this format can't be used with the type of the path.
-   * Otherwise returns a priority number. Higher is more suitable.
-   */
-  getInputTypePriority(type: PathType, values: any[]): number | null;
-
-  /**
-   * Generates the default format options for the given PathInfo
-   */
-  getDefaultFormatOptions(values: any[]): OutputFormatOptions;
-
-  /**
-   * Converts the value to the internal usable value
-   */
-  toInternalValue(value: any, options?: OutputFormatOptions): any;
-
-  /**
-   * Converts the internal value to the output value
-   */
-  toOutputValue(value: any, options?: OutputFormatOptions): string;
-}
 
 export class StringDataFormatter implements ChartDataFormatter {
   format: OutputFormat = 'string';
@@ -219,4 +182,15 @@ export function getPrimaryDataType(pathInfo: PathInfo): PathType {
     }
   });
   return type;
+}
+
+export const outputFormatters: ChartDataFormatter[] = [
+  new StringDataFormatter(),
+  new DatetimeDataFormatter(),
+  new NumberDataFormatter(),
+  new BooleanDataFormatter()
+];
+
+export function getFormatter(column: ColumnConfig): ChartDataFormatter {
+  return outputFormatters.find(f => f.format === column.format);
 }
