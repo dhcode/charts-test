@@ -1,6 +1,8 @@
 import { PathInfo, PathType } from './models/path-info';
 import { ChartDataFormatter, OutputFormat, OutputFormatOptions } from './models/data-formatter';
 import { ColumnConfig } from './models/chart-config';
+import { format as numberFormat } from 'd3-format';
+import { timeFormat } from 'd3-time-format';
 
 
 export class StringDataFormatter implements ChartDataFormatter {
@@ -36,6 +38,10 @@ export class StringDataFormatter implements ChartDataFormatter {
     return commonOutput(value, options);
   }
 
+  getOutputTickOptions(options?: OutputFormatOptions): any {
+    return commonOutputTickOptions(options);
+  }
+
 }
 
 export class DatetimeDataFormatter implements ChartDataFormatter {
@@ -44,9 +50,9 @@ export class DatetimeDataFormatter implements ChartDataFormatter {
 
   getDefaultFormatOptions(values: any[]): OutputFormatOptions {
     return {
-      format: 'medium',
       prefix: '',
-      suffix: ''
+      suffix: '',
+      format: ''
     };
   }
 
@@ -70,7 +76,14 @@ export class DatetimeDataFormatter implements ChartDataFormatter {
   }
 
   toOutputValue(value: Date | null, options?: OutputFormatOptions): string {
-    return commonOutput(value && value.toLocaleString(), options);
+    return timeFormat(this.getOutputTickOptions(options).tickformat || '%c')(value);
+  }
+
+  getOutputTickOptions(options?: OutputFormatOptions): any {
+    return {
+      ...commonOutputTickOptions(options),
+      tickformat: options.format
+    };
   }
 
 }
@@ -87,10 +100,7 @@ export class NumberDataFormatter implements ChartDataFormatter {
     return {
       prefix: '',
       suffix: '',
-      useGrouping: true,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: hasDecimals ? 2 : 0,
-      minimumIntegerDigits: 1
+      format: hasDecimals ? ',.2f' : ',d',
     };
   }
 
@@ -119,13 +129,14 @@ export class NumberDataFormatter implements ChartDataFormatter {
     if (!options) {
       options = this.getDefaultFormatOptions([value]);
     }
-    const opt = {
-      useGrouping: options.useGrouping,
-      minimumFractionDigits: options.minimumFractionDigits,
-      maximumFractionDigits: options.maximumFractionDigits,
-      minimumIntegerDigits: options.minimumIntegerDigits,
+    return numberFormat(this.getOutputTickOptions(options).tickformat)(value);
+  }
+
+  getOutputTickOptions(options?: OutputFormatOptions): any {
+    return {
+      ...commonOutputTickOptions(options),
+      tickformat: options.format
     };
-    return commonOutput(value !== null ? value.toLocaleString(undefined, opt) : null, options);
   }
 
 }
@@ -165,6 +176,15 @@ export class BooleanDataFormatter implements ChartDataFormatter {
     return commonOutput(value ? options.trueLabel : options.falseLabel, options);
   }
 
+  getOutputTickOptions(options?: OutputFormatOptions): any {
+    return {
+      ...commonOutputTickOptions(options),
+      tickmode: 'array',
+      tickvals: [true, false],
+      ticktext: [options.trueLabel, options.falseLabel]
+    };
+  }
+
 }
 
 function commonOutput(value: any, options: OutputFormatOptions): string {
@@ -172,6 +192,13 @@ function commonOutput(value: any, options: OutputFormatOptions): string {
     return value;
   }
   return (options.prefix || '') + value + (options.suffix || '');
+}
+
+function commonOutputTickOptions(options: OutputFormatOptions): any {
+  return {
+    tickprefix: options.prefix || '',
+    ticksuffix: options.suffix || ''
+  };
 }
 
 export function getPrimaryDataType(pathInfo: PathInfo): PathType {

@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartConfig } from '../lib/models/chart-config';
-import * as c3 from 'c3';
-import { ChartTypeConfigurer} from '../lib/models/chart-types';
-import { ChartAPI } from 'c3';
-import { getChartTypeConfigurer } from '../lib/chart-configurers/index';
+import { ChartTypeConfigurer } from '../lib/models/chart-types';
+import { getChartTypeConfigurer } from '../lib/chart-configurers';
+import * as Plotly from 'plotly.js/dist/plotly.js';
 
 @Component({
   selector: 'app-configured-chart',
@@ -20,7 +19,7 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
 
   private configurer: ChartTypeConfigurer;
 
-  private chart: ChartAPI;
+  private chart: any;
 
   constructor() {
   }
@@ -49,21 +48,21 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
     }
 
     if (this.chart) {
-      this.chart.destroy();
+
     }
 
     console.log('buildChart');
 
     this.configurer = getChartTypeConfigurer(this.config.type);
 
-    const chartConfig = {
-      bindto: this.chartContainer.nativeElement,
+    const config = {
+      config: {},
       ...this.configurer.createConfig(this.config.columns, this.config.chartOptions)
     };
 
-    console.log('c3 chartConfig', chartConfig);
+    console.log('chartConfig', config);
 
-    this.chart = c3.generate(chartConfig);
+    this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config.data, config.layout);
 
   }
 
@@ -71,8 +70,9 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
     if (!this.chart) {
       return;
     }
+    const dataConfig = this.configurer.createDataConfig(this.config.columns, this.config.chartOptions, this.data);
+    Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
 
-    this.chart.load(this.configurer.createDataConfig(this.config.columns, this.config.chartOptions, this.data));
   }
 
 

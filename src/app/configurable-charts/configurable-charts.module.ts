@@ -21,11 +21,14 @@ import {
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ChartConfigurationComponent } from './chart-configuration/chart-configuration.component';
+import { PlotlyModule } from 'angular-plotly.js';
+import { D3FormatPipe } from './pipes/d3-format.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    PlotlyModule,
     MatGridListModule,
     MatCheckboxModule,
     MatInputModule,
@@ -46,7 +49,8 @@ import { ChartConfigurationComponent } from './chart-configuration/chart-configu
     PathSelectorComponent,
     FormatOptionsDialogComponent,
     ConfiguredChartComponent,
-    ChartConfigurationComponent
+    ChartConfigurationComponent,
+    D3FormatPipe
   ],
   entryComponents: [
     FormatOptionsDialogComponent

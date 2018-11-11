@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +7,25 @@ import { of } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'charts-test';
-  data = generateData(10000);
+  data = generateData(10);
+
+  public graph = {
+    data: [
+      {
+        x: [1, 2, 3],
+        y: [2, 6, 3],
+        type: 'scatter',
+        mode: 'lines+points',
+        marker: {color: 'red'}
+      },
+      {
+        x: [1, 2, 3],
+        y: [2, 5, 3],
+        type: 'bar'
+      },
+    ],
+    layout: {autosize: true, title: 'A Fancy Plot'}
+  };
 
   ngOnInit(): void {
   }

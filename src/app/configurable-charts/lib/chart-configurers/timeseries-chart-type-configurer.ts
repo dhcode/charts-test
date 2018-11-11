@@ -1,5 +1,4 @@
 import { ColumnConfig } from '../models/chart-config';
-import { ChartConfiguration } from 'c3';
 import { getValueByPath } from '../chart-type-utils';
 import { ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
 import { getFormatter } from '../chart-data-formatters';
@@ -21,68 +20,92 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): ChartConfiguration {
+  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): any {
     const xCol = columns.find(col => col.axis === 'x');
-    const yCols = columns.filter(col => col.axis === 'y' && ['number', 'boolean'].includes(col.format));
-    const y2Cols = columns.filter(col => col.axis === 'y2' && ['number', 'boolean'].includes(col.format));
-    const colsInfo = this.getDataColsInfo(columns);
+    const xFormatter = getFormatter(xCol);
+    const yCols = this.getDataColsInfo(columns, true);
 
-    const axes = {};
-    colsInfo.filter(c => c.col.axis !== 'x').forEach(c => axes[c.name] = c.col.axis);
-    const dataCols = colsInfo.map(c => c.name);
+    const firstYCol = yCols.find(ci => ci.col.axis === 'y');
+    const firstY2Col = yCols.find(ci => ci.col.axis === 'y2');
 
-    const axis = {
-      x: {
-        type: 'timeseries',
-        label: xCol.label
+    const layout = {
+      yaxis: {
+        ...firstYCol.formatter.getOutputTickOptions(firstYCol.col.formatOptions),
+        title: options.yAxisLabel,
       },
-      y: {
-        label: options.yAxisLabel
+      xaxis: {
+        title: options.xAxisLabel,
+        ...xFormatter.getOutputTickOptions(xCol.formatOptions),
       }
     };
-    if (y2Cols.length) {
-      axis['y2'] = {label: options.y2AxisLabel};
+
+    if (firstY2Col) {
+      layout['y2axis'] = {
+        ...firstY2Col.formatter.getOutputTickOptions(firstY2Col.col.formatOptions),
+        title: options.y2AxisLabel,
+        side: 'right',
+        overlaying: 'y'
+      };
+    }
+
+    const data = [];
+    for (const ci of yCols) {
+      data.push({
+        x: [],
+        y: [],
+        name: ci.col.label,
+        type: 'scatter',
+        mode: 'lines',
+        yaxis: ci.col.axis
+      });
+    }
+
+
+    return {
+      data: data,
+      layout: layout
+    };
+  }
+
+  createDataConfig(columns: ColumnConfig[], options: ChartTypeOptions, sourceData: any[]): any {
+    const indices = [];
+    const data = {
+      x: [],
+      y: []
+    };
+    if (sourceData && sourceData.length) {
+      const yCols = this.getDataColsInfo(columns, true);
+      const xCol = columns.find(col => col.axis === 'x');
+      const xFormatter = getFormatter(xCol);
+
+      for (const ci of yCols) {
+        indices.push(ci.index);
+        data.x.push(new Array(sourceData.length));
+        data.y.push(new Array(sourceData.length));
+      }
+
+      let i = 0;
+      for (const d of sourceData) {
+        const time = getValueByPath(d, xCol.path.split('.'));
+        for (const ci of yCols) {
+          const value = getValueByPath(d, ci.col.path.split('.'));
+          data.y[ci.index][i] = ci.formatter.toInternalValue(value, ci.col.formatOptions);
+          data.x[ci.index][i] = xFormatter.toInternalValue(time, xCol.formatOptions);
+        }
+        i++;
+      }
     }
 
     return {
-      data: {
-        x: 'x',
-        xFormat: '%Y-%m-%dT%H:%M:%SZ',
-        rows: [dataCols],
-        axes: axes
-      },
-      axis: axis
+      data: data,
+      indices: indices
     };
-  }
-
-  createDataConfig(columns: ColumnConfig[], options: ChartTypeOptions, data: any[]): any {
-    const dataCfg = {
-      rows: []
-    };
-    if (data && data.length) {
-      const colsInfo = this.getDataColsInfo(columns, true);
-      const dataCols = colsInfo.map(c => c.name);
-      dataCfg.rows.push(dataCols);
-      for (const d of data) {
-        dataCfg.rows.push(colsInfo.map(c => {
-          const value = getValueByPath(d, c.col.path.split('.'));
-          return c.formatter.toInternalValue(value, c.col.formatOptions);
-        }));
-      }
-    }
-
-    return dataCfg;
   }
 
   private getDataColsInfo(columns: ColumnConfig[], withFormatter = false) {
-    const xCol = columns.find(col => col.axis === 'x');
-    const yCols = columns.filter(col => col.axis === 'y' && ['number', 'boolean'].includes(col.format));
-    const y2Cols = columns.filter(col => col.axis === 'y2' && ['number', 'boolean'].includes(col.format));
-
+    const yCols = columns.filter(col => (col.axis === 'y' || col.axis === 'y2') && ['number', 'boolean'].includes(col.format));
     return [
-      {name: 'x', col: xCol, formatter: withFormatter && getFormatter(xCol)},
-      ...yCols.map((c, i) => ({name: 'y1_' + i, col: c, formatter: withFormatter && getFormatter(c)})),
-      ...y2Cols.map((c, i) => ({name: 'y2_' + i, col: c, formatter: withFormatter && getFormatter(c)}))
+      ...yCols.map((c, i) => ({index: i, col: c, formatter: withFormatter && getFormatter(c)}))
     ];
   }
 

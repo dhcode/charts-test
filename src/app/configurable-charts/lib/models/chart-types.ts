@@ -1,4 +1,3 @@
-import { ChartConfiguration } from 'c3';
 import { ColumnConfig } from './chart-config';
 
 export type ChartType = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
@@ -28,9 +27,9 @@ export interface ChartTypeConfigurer {
   getDefaultOptions(columns: ColumnConfig[]): ChartTypeOptions;
 
   /**
-   * Create the config for c3
+   * Create the config for the chart library
    */
-  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): ChartConfiguration;
+  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): any;
 
   /**
    * Creates the data to load in the chart

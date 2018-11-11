@@ -11,18 +11,10 @@
 
   <ng-container *ngIf="column.format === 'number'">
 
-    <mat-checkbox class="full-width" [(ngModel)]="options.useGrouping">Use grouping</mat-checkbox>
-
     <mat-form-field class="full-width">
-      <input matInput type="number" placeholder="Minimum Integer Digits" [(ngModel)]="options.minimumIntegerDigits" [min]="1" [max]="6">
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput type="number" placeholder="Minimum Fraction Digits" [(ngModel)]="options.minimumFractionDigits" [min]="0" [max]="6">
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput type="number" placeholder="Maximum Fraction Digits" [(ngModel)]="options.maximumFractionDigits" [min]="0" [max]="6">
+      <mat-select placeholder="Format" [(ngModel)]="options.format">
+        <mat-option *ngFor="let format of numberFormats" [value]="format">{{format}} ({{1234.453 | d3Format: format}})</mat-option>
+      </mat-select>
     </mat-form-field>
 
   </ng-container>

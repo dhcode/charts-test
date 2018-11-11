@@ -12,6 +12,11 @@ export class FormatOptionsDialogComponent implements OnInit {
 
   options: OutputFormatOptions;
 
+  numberFormats = [
+    ',d',
+    ',.2f'
+  ];
+
   constructor(public dialogRef: MatDialogRef<FormatOptionsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private column: ColumnConfig) {
   }

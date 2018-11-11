@@ -37,4 +37,9 @@ export interface ChartDataFormatter {
    * Converts the internal value to the output value
    */
   toOutputValue(value: any, options?: OutputFormatOptions): string;
+
+  /**
+   * Gets the output Tick options for Plotly
+   */
+  getOutputTickOptions(options?: OutputFormatOptions): any;
 }
