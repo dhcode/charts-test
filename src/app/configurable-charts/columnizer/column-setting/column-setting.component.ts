@@ -56,7 +56,7 @@ export class ColumnSettingComponent implements OnDestroy, OnChanges {
   }
 
   @Input() set column(column: ColumnConfig) {
-    this._column = {...column};
+    this._column = {...column} as ColumnConfig;
   }
 
   ngOnDestroy(): void {

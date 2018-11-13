@@ -180,8 +180,9 @@ export class BooleanDataFormatter implements ChartDataFormatter {
     return {
       ...commonOutputTickOptions(options),
       tickmode: 'array',
-      tickvals: [true, false],
-      ticktext: [options.trueLabel, options.falseLabel]
+      tickvals: [false, true],
+      tick0: false,
+      ticktext: [options.falseLabel, options.trueLabel]
     };
   }
 

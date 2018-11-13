@@ -28,6 +28,11 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     const firstYCol = yCols.find(ci => ci.col.axis === 'y');
     const firstY2Col = yCols.find(ci => ci.col.axis === 'y2');
 
+    if (!firstYCol) {
+      throw new Error('Missing columns for Y - Axis');
+    }
+
+
     const layout = {
       yaxis: {
         ...firstYCol.formatter.getOutputTickOptions(firstYCol.col.formatOptions),
@@ -40,7 +45,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     };
 
     if (firstY2Col) {
-      layout['y2axis'] = {
+      layout['yaxis2'] = {
         ...firstY2Col.formatter.getOutputTickOptions(firstY2Col.col.formatOptions),
         title: options.y2AxisLabel,
         side: 'right',
@@ -50,14 +55,18 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
 
     const data = [];
     for (const ci of yCols) {
-      data.push({
+      const line = {
         x: [],
         y: [],
         name: ci.col.label,
         type: 'scatter',
-        mode: 'lines',
+        mode: 'lines+markers',
         yaxis: ci.col.axis
-      });
+      };
+      if (ci.col.format === 'boolean') {
+        line['line'] = {shape: 'hv'};
+      }
+      data.push(line);
     }
 
 

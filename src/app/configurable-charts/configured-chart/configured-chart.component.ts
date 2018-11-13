@@ -62,7 +62,7 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
 
     console.log('chartConfig', config);
 
-    this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config.data, config.layout);
+    this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config['data'], config['layout']);
 
   }
 
