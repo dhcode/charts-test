@@ -1,74 +1,107 @@
-import { ColumnConfig } from '../models/chart-config';
 import { getValueByPath } from '../chart-type-utils';
-import { ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
+import { AxisInfo, ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
 import { getFormatter } from '../chart-data-formatters';
+import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 
 export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
   type: ChartType = 'timeseries';
   label = 'Time series';
 
-  isAvailable(columns: ColumnConfig[]): boolean {
-    const xCol = columns.find(col => col.axis === 'x' && col.format === 'datetime');
-    const yCols = columns.filter(col => col.axis === 'y' && ['number', 'boolean'].includes(col.format));
-    return xCol && yCols.length > 0;
+  private axesInfo: AxisInfo[] = [
+    {
+      id: 'x',
+      label: 'X - Axis',
+      required: true,
+      allowedFormats: ['datetime'],
+      options: []
+    },
+    {
+      id: 'y',
+      label: 'Y - Axis',
+      required: true,
+      allowedFormats: ['number', 'boolean'],
+      options: []
+    },
+    {
+      id: 'y2',
+      label: 'Y2 - Axis',
+      required: false,
+      allowedFormats: ['number', 'boolean'],
+      options: []
+    }
+  ];
+
+  getAxesInfo(): AxisInfo[] {
+    return this.axesInfo;
   }
 
-  getDefaultOptions(columns: ColumnConfig[]): ChartTypeOptions {
+  getDefaultAxes(): AxesConfig {
+    const xAxis: AxisConfig = {
+      traces: [],
+      label: '',
+      format: 'datetime',
+      formatOptions: {}
+    };
+    const yAxis: AxisConfig = {
+      traces: [],
+      label: '',
+      format: 'number',
+      formatOptions: {}
+    };
+    const y2Axis: AxisConfig = {
+      traces: [],
+      label: '',
+      format: 'number',
+      formatOptions: {}
+    };
     return {
-      yAxisLabel: '',
-      y2AxisLabel: ''
+      x: xAxis,
+      y: yAxis,
+      y2: y2Axis
     };
   }
 
-  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): any {
-    const xCol = columns.find(col => col.axis === 'x');
-    const xFormatter = getFormatter(xCol);
-    const yCols = this.getDataColsInfo(columns, true);
+  getDefaultOptions(): ChartTypeOptions {
+    return {};
+  }
 
-    const firstYCol = yCols.find(ci => ci.col.axis === 'y');
-    const firstY2Col = yCols.find(ci => ci.col.axis === 'y2');
+  createConfig(axes: AxesConfig, options: ChartTypeOptions): any {
+    const xAxis: AxisConfig = axes.x;
+    const yAxis: AxisConfig = axes.y;
+    const y2Axis: AxisConfig = axes.y2;
 
-    if (!firstYCol) {
-      throw new Error('Missing columns for Y - Axis');
+    if (!xAxis.traces.length) {
+      throw new Error('Missing traces for X - Axis');
+    }
+    if (!yAxis.traces.length) {
+      throw new Error('Missing traces for Y - Axis');
     }
 
 
     const layout = {
-      yaxis: {
-        ...firstYCol.formatter.getOutputTickOptions(firstYCol.col.formatOptions),
-        title: options.yAxisLabel,
-      },
       xaxis: {
-        title: options.xAxisLabel,
-        ...xFormatter.getOutputTickOptions(xCol.formatOptions),
-      }
+        title: xAxis.label,
+        ...getFormatter(xAxis).getOutputTickOptions(xAxis.formatOptions),
+      },
+      yaxis: {
+        ...getFormatter(yAxis).getOutputTickOptions(yAxis.formatOptions),
+        title: yAxis.label,
+      },
     };
 
-    if (firstY2Col) {
+    if (y2Axis.traces.length) {
       layout['yaxis2'] = {
-        ...firstY2Col.formatter.getOutputTickOptions(firstY2Col.col.formatOptions),
-        title: options.y2AxisLabel,
+        ...getFormatter(y2Axis).getOutputTickOptions(y2Axis.formatOptions),
+        title: y2Axis.label,
         side: 'right',
         overlaying: 'y'
       };
     }
 
-    const data = [];
-    for (const ci of yCols) {
-      const line = {
-        x: [],
-        y: [],
-        name: ci.col.label,
-        type: 'scatter',
-        mode: 'lines+markers',
-        yaxis: ci.col.axis
-      };
-      if (ci.col.format === 'boolean') {
-        line['line'] = {shape: 'hv'};
-      }
-      data.push(line);
-    }
-
+    const data = [
+      ...this.getTraces('y', yAxis),
+      ...this.getTraces('y2', y2Axis)
+    ];
 
     return {
       data: data,
@@ -76,32 +109,64 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  createDataConfig(columns: ColumnConfig[], options: ChartTypeOptions, sourceData: any[]): any {
+  private getTraces(axisId: string, axis: AxisConfig): any[] {
+    return axis.traces.map(trace => {
+      const chartTrace = {
+        x: [],
+        y: [],
+        name: trace.label,
+        type: trace.type || 'scatter',
+        mode: 'lines+markers',
+        yaxis: axisId
+      };
+      if (axis.format === 'boolean') {
+        chartTrace['line'] = {shape: 'hv'};
+      }
+      return chartTrace;
+    });
+  }
+
+  createDataConfig(axes: AxesConfig, options: ChartTypeOptions, sourceData: any[]): any {
     const indices = [];
     const data = {
       x: [],
       y: []
     };
     if (sourceData && sourceData.length) {
-      const yCols = this.getDataColsInfo(columns, true);
-      const xCol = columns.find(col => col.axis === 'x');
-      const xFormatter = getFormatter(xCol);
+      const xFormatter = getFormatter(axes.x);
+      const xTrace: TraceConfig = axes.x.traces[0];
 
-      for (const ci of yCols) {
-        indices.push(ci.index);
-        data.x.push(new Array(sourceData.length));
-        data.y.push(new Array(sourceData.length));
+      const axisIds = ['y', 'y2'];
+      let t = 0;
+      for (const axisId of axisIds) {
+        const axis = axes[axisId];
+        for (const trace of axis.traces) {
+          indices.push(t);
+          data.y.push(new Array(sourceData.length));
+          t++;
+        }
       }
 
       let i = 0;
+      const xValues = new Array(sourceData.length);
       for (const d of sourceData) {
-        const time = getValueByPath(d, xCol.path.split('.'));
-        for (const ci of yCols) {
-          const value = getValueByPath(d, ci.col.path.split('.'));
-          data.y[ci.index][i] = ci.formatter.toInternalValue(value, ci.col.formatOptions);
-          data.x[ci.index][i] = xFormatter.toInternalValue(time, xCol.formatOptions);
+        const time = getValueByPath(d, xTrace.path.split('.'));
+        xValues[i] = xFormatter.toInternalValue(time, axes.x.formatOptions);
+        t = 0;
+        for (const axisId of axisIds) {
+          const axis = axes[axisId];
+          const formatter = getFormatter(axis);
+          for (const trace of axis.traces) {
+            const value = getValueByPath(d, trace.path.split('.'));
+            data.y[t][i] = formatter.toInternalValue(value, axis.formatOptions);
+            t++;
+          }
         }
         i++;
+      }
+
+      for (t = 0; t < data.y.length; t++) {
+        data.x.push(xValues);
       }
     }
 
@@ -110,13 +175,5 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       indices: indices
     };
   }
-
-  private getDataColsInfo(columns: ColumnConfig[], withFormatter = false) {
-    const yCols = columns.filter(col => (col.axis === 'y' || col.axis === 'y2') && ['number', 'boolean'].includes(col.format));
-    return [
-      ...yCols.map((c, i) => ({index: i, col: c, formatter: withFormatter && getFormatter(c)}))
-    ];
-  }
-
 
 }

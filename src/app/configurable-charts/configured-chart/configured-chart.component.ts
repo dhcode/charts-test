@@ -17,6 +17,8 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
 
   @Input() data: any[];
 
+  error = null;
+
   private configurer: ChartTypeConfigurer;
 
   private chart: any;
@@ -47,22 +49,25 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
       return;
     }
 
-    if (this.chart) {
-
-    }
-
     console.log('buildChart');
 
     this.configurer = getChartTypeConfigurer(this.config.type);
 
-    const config = {
-      config: {},
-      ...this.configurer.createConfig(this.config.columns, this.config.chartOptions)
-    };
+    try {
+      const config = {
+        config: {},
+        ...this.configurer.createConfig(this.config.axes, this.config.chartOptions)
+      };
 
-    console.log('chartConfig', config);
+      console.log('chartConfig', config);
 
-    this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config['data'], config['layout']);
+      this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config['data'], config['layout']);
+      this.error = null;
+    } catch (e) {
+      console.error(e);
+      this.error = e;
+    }
+
 
   }
 
@@ -70,8 +75,14 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
     if (!this.chart) {
       return;
     }
-    const dataConfig = this.configurer.createDataConfig(this.config.columns, this.config.chartOptions, this.data);
-    Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
+    try {
+      const dataConfig = this.configurer.createDataConfig(this.config.axes, this.config.chartOptions, this.data);
+      Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
+      this.error = null;
+    } catch (e) {
+      console.error(e);
+      this.error = e;
+    }
 
   }
 

@@ -1,6 +1,8 @@
-import { ColumnConfig } from './chart-config';
+import { AxesConfig, AxisConfig } from './chart-config';
+import { OutputFormat } from './data-formatter';
 
 export type ChartType = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
+export type ChartOptionType = 'int' | 'string' | 'decimal' | 'boolean';
 
 export interface ChartTypeOptions {
   [key: string]: any;
@@ -17,24 +19,43 @@ export interface ChartTypeConfigurer {
   label: string;
 
   /**
-   * Whether the columns fulfill the requirements to use this chart type
+   * Information about the available axes
    */
-  isAvailable(columns: ColumnConfig[]): boolean;
+  getAxesInfo(): AxisInfo[];
+
+  /**
+   * Generate the default axes configuration
+   */
+  getDefaultAxes(): AxesConfig;
 
   /**
    * Generate the default options for this chart type
    */
-  getDefaultOptions(columns: ColumnConfig[]): ChartTypeOptions;
+  getDefaultOptions(): ChartTypeOptions;
 
   /**
    * Create the config for the chart library
    */
-  createConfig(columns: ColumnConfig[], options: ChartTypeOptions): any;
+  createConfig(axes: AxesConfig, options: ChartTypeOptions): any;
 
   /**
    * Creates the data to load in the chart
    */
-  createDataConfig(columns: ColumnConfig[], options: ChartTypeOptions, data: any[]): any;
+  createDataConfig(axes: AxesConfig, options: ChartTypeOptions, data: any[]): any;
 }
 
+export interface AxisInfo {
+  id: string;
+  label: string;
+  required: boolean;
+  allowedFormats: OutputFormat[];
+  options: ChartOption[];
+}
 
+export interface ChartOption {
+  name: string;
+  label: string;
+  type: ChartOptionType;
+  selectionValues: any[];
+  defaultValue: any;
+}

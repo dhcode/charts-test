@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ChartConfig } from '../lib/models/chart-config';
-import { ChartType, ChartTypeConfigurer } from '../lib/models/chart-types';
-import { getAvailableChartTypes } from '../lib/chart-configurers';
+import { AxisConfig, ChartConfig } from '../lib/models/chart-config';
+import { AxisInfo, ChartType, ChartTypeConfigurer } from '../lib/models/chart-types';
+import { chartTypeConfigurers } from '../lib/chart-configurers';
 
 @Component({
   selector: 'app-chart-configuration',
@@ -16,14 +16,16 @@ export class ChartConfigurationComponent implements OnInit {
 
   @Input() data: any[];
 
-  chartTypes: ChartTypeConfigurer[] = [];
+  chartTypes: ChartTypeConfigurer[] = chartTypeConfigurers;
+
+  axesInfo: AxisInfo[];
 
   constructor() {
   }
 
   ngOnInit() {
     if (!this.config) {
-      this.config = {rev: 1, columns: [], type: null, chartOptions: {}};
+      this.config = {rev: 1, type: null, axes: {}, chartOptions: {}};
     }
   }
 
@@ -31,11 +33,6 @@ export class ChartConfigurationComponent implements OnInit {
     console.log('update ChartConfig', config);
     this.config = {...config};
     this.configChange.next(this.config);
-    this.updateChartTypes();
-  }
-
-  updateChartTypes() {
-    this.chartTypes = getAvailableChartTypes(this.config.columns);
   }
 
   updateChartType(type: ChartType) {
@@ -44,12 +41,19 @@ export class ChartConfigurationComponent implements OnInit {
       const configurer = this.chartTypes.find(c => c.type === type);
       const config: ChartConfig = {
         ...this.config, type: type,
-        chartOptions: configurer.getDefaultOptions(this.config.columns)
+        axes: configurer.getDefaultAxes(),
+        chartOptions: configurer.getDefaultOptions()
       };
       this.config = config;
       this.configChange.next(config);
+
+      this.axesInfo = configurer.getAxesInfo();
     }
 
+  }
+
+  updateAxis(id: string, axis: AxisConfig) {
+    this.config.axes[id] = axis;
   }
 
 }

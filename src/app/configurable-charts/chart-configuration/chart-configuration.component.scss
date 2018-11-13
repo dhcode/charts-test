@@ -1,0 +1,10 @@
+.axis-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  .axis-item {
+    max-width: 400px;
+    min-width: 300px;
+    margin: 1em;
+  }
+}

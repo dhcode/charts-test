@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { OutputFormatOptions } from '../../lib/models/data-formatter';
-import { ColumnConfig } from '../../lib/models/chart-config';
+import { AxisConfig } from '../../lib/models/chart-config';
 
 @Component({
   selector: 'app-format-options-dialog',
@@ -18,7 +18,7 @@ export class FormatOptionsDialogComponent implements OnInit {
   ];
 
   constructor(public dialogRef: MatDialogRef<FormatOptionsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private column: ColumnConfig) {
+              @Inject(MAT_DIALOG_DATA) private column: AxisConfig) {
   }
 
   ngOnInit() {

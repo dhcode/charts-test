@@ -1,8 +1,8 @@
 import { PathInfo, PathType } from './models/path-info';
 import { ChartDataFormatter, OutputFormat, OutputFormatOptions } from './models/data-formatter';
-import { ColumnConfig } from './models/chart-config';
 import { format as numberFormat } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
+import { AxisConfig } from './models/chart-config';
 
 
 export class StringDataFormatter implements ChartDataFormatter {
@@ -219,6 +219,6 @@ export const outputFormatters: ChartDataFormatter[] = [
   new BooleanDataFormatter()
 ];
 
-export function getFormatter(column: ColumnConfig): ChartDataFormatter {
-  return outputFormatters.find(f => f.format === column.format);
+export function getFormatter(axis: AxisConfig): ChartDataFormatter {
+  return outputFormatters.find(f => f.format === axis.format);
 }

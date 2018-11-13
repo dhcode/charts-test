@@ -1,7 +1,9 @@
-import { PathType } from './path-info';
 import { ChartType, ChartTypeOptions } from './chart-types';
 import { OutputFormat, OutputFormatOptions } from './data-formatter';
 
+/**
+ * Savable chart configuration
+ */
 export interface ChartConfig {
   /**
    * Revision number of the configuration format
@@ -11,7 +13,8 @@ export interface ChartConfig {
    * If null, no chart type has been set yet
    */
   type: ChartType | null;
-  columns: ColumnConfig[];
+
+  axes: AxesConfig;
 
   /**
    * Chart type specific configuration options
@@ -19,24 +22,57 @@ export interface ChartConfig {
   chartOptions: ChartTypeOptions;
 }
 
-export interface ColumnConfig {
-  label: string;
-  /**
-   * Whether the column should be used in the chart
-   */
-  active: boolean;
-  /**
-   * Source type
-   */
-  type: PathType;
-  path: string;
-  format: OutputFormat;
-  formatOptions: OutputFormatOptions;
-  /**
-   * if this should not be rendered as default chart type
-   */
-  chartType?: ChartType;
-  axis: 'x' | 'y' | 'y2';
-  color?: string;
+export interface AxesConfig {
+  [axis: string]: AxisConfig;
 }
 
+
+export interface AxisConfig {
+  /**
+   * Traces that are displayed on the Axis
+   */
+  traces: TraceConfig[];
+  /**
+   * Label to be displayed on the Axis
+   */
+  label: string;
+  /**
+   * Format for the tick output
+   */
+  format: OutputFormat;
+  /**
+   * Format Options
+   */
+  formatOptions: OutputFormatOptions;
+}
+
+/**
+ * A trace is a line in a line chart
+ */
+export interface TraceConfig {
+  /**
+   * The path where the value is found in a document
+   */
+  path: string;
+  /**
+   * Label of the series
+   */
+  label: string;
+  /**
+   * Optional color for the series
+   */
+  color?: string;
+  /**
+   * optional different type than the ChartType
+   */
+  type?: string;
+
+  /**
+   * Custom options for the trace
+   */
+  options: TraceOptions;
+}
+
+export interface TraceOptions {
+  [key: string]: any;
+}

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColumnizerComponent } from './columnizer.component';
+import { AxisConfigurationComponent } from './axis-configuration.component';
 
-describe('ColumnizerComponent', () => {
-  let component: ColumnizerComponent;
-  let fixture: ComponentFixture<ColumnizerComponent>;
+describe('AxisConfigurationComponent', () => {
+  let component: AxisConfigurationComponent;
+  let fixture: ComponentFixture<AxisConfigurationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColumnizerComponent ]
+      declarations: [ AxisConfigurationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ColumnizerComponent);
+    fixture = TestBed.createComponent(AxisConfigurationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

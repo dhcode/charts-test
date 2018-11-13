@@ -1,9 +1,14 @@
-<app-columnizer [data]="data" [config]="config" (configChange)="updateConfig($event)"></app-columnizer>
-
 <mat-button-toggle-group [value]="config.type" (valueChange)="updateChartType($event)">
   <mat-button-toggle *ngFor="let ct of chartTypes" [value]="ct.type">
     {{ct.label}}
   </mat-button-toggle>
 </mat-button-toggle-group>
+
+<div class="axis-container">
+  <div *ngFor="let info of axesInfo" class="axis-item">
+    <app-axis-configuration [axisInfo]="info" [axis]="config.axes[info.id]" (axisChange)="updateAxis(info.id, $event)"></app-axis-configuration>
+  </div>
+</div>
+
 
 <app-configured-chart [config]="config" [data]="data"></app-configured-chart>
