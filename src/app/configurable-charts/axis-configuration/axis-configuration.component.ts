@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AxisConfig } from '../lib/models/chart-config';
+import { AxisConfig, TraceConfig } from '../lib/models/chart-config';
 import { AxisInfo } from '../lib/models/chart-types';
 import { ChartDataFormatter, OutputFormat } from '../lib/models/data-formatter';
 import { getDefaultFormatOptions } from '../lib/chart-config-utils';
@@ -25,7 +25,7 @@ export class AxisConfigurationComponent implements OnInit {
 
   formatters: ChartDataFormatter[] = outputFormatters;
 
-  example: string;
+  canAddTraces = false;
 
   constructor(private dialog: MatDialog) {
   }
@@ -35,6 +35,7 @@ export class AxisConfigurationComponent implements OnInit {
 
   @Input() set axis(axis: AxisConfig) {
     this._axis = axis;
+    this.updateSelection();
   }
 
   updateFormat(format: OutputFormat) {
@@ -60,7 +61,29 @@ export class AxisConfigurationComponent implements OnInit {
     });
   }
 
+  updateSelection() {
+    if (this.axisInfo) {
+      this.canAddTraces = this._axis.traces.length < this.axisInfo.maxTraces;
+    }
+  }
+
+  addTraceByPath(pathInfo: PathInfo) {
+    const trace: TraceConfig = {
+      path: pathInfo.path,
+      label: pathInfo.path.split('.').slice(-1)[0],
+      options: {}
+    };
+    this._axis.traces.push(trace);
+    this.notifyChange();
+  }
+
+  removeTrace(trace: TraceConfig) {
+    this._axis.traces.splice(this._axis.traces.indexOf(trace), 1);
+    this.notifyChange();
+  }
+
   notifyChange() {
+    this.updateSelection();
     this.axisChange.next(this._axis);
   }
 

@@ -12,6 +12,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       id: 'x',
       label: 'X - Axis',
       required: true,
+      maxTraces: 1,
       allowedFormats: ['datetime'],
       options: []
     },
@@ -19,6 +20,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       id: 'y',
       label: 'Y - Axis',
       required: true,
+      maxTraces: 10,
       allowedFormats: ['number', 'boolean'],
       options: []
     },
@@ -26,6 +28,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       id: 'y2',
       label: 'Y2 - Axis',
       required: false,
+      maxTraces: 10,
       allowedFormats: ['number', 'boolean'],
       options: []
     }

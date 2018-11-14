@@ -1,14 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AxisConfig, ChartConfig } from '../lib/models/chart-config';
 import { AxisInfo, ChartType, ChartTypeConfigurer } from '../lib/models/chart-types';
 import { chartTypeConfigurers } from '../lib/chart-configurers';
+import { PathInfo } from '../lib/models/path-info';
+import { identifyPathsInArray } from '../lib/path-utils';
 
 @Component({
   selector: 'app-chart-configuration',
   templateUrl: './chart-configuration.component.html',
   styleUrls: ['./chart-configuration.component.scss']
 })
-export class ChartConfigurationComponent implements OnInit {
+export class ChartConfigurationComponent implements OnInit, OnChanges {
 
   @Input() config: ChartConfig;
 
@@ -20,6 +22,8 @@ export class ChartConfigurationComponent implements OnInit {
 
   axesInfo: AxisInfo[];
 
+  paths: PathInfo[];
+
   constructor() {
   }
 
@@ -29,10 +33,10 @@ export class ChartConfigurationComponent implements OnInit {
     }
   }
 
-  updateConfig(config: ChartConfig) {
-    console.log('update ChartConfig', config);
-    this.config = {...config};
-    this.configChange.next(this.config);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && changes.data.currentValue) {
+      this.paths = identifyPathsInArray(changes.data.currentValue);
+    }
   }
 
   updateChartType(type: ChartType) {
@@ -53,7 +57,14 @@ export class ChartConfigurationComponent implements OnInit {
   }
 
   updateAxis(id: string, axis: AxisConfig) {
-    this.config.axes[id] = axis;
+    const config: ChartConfig = {
+      ...this.config,
+    };
+    config.axes[id] = axis;
+
+    this.config = config;
+    this.configChange.next(config);
+
   }
 
 }

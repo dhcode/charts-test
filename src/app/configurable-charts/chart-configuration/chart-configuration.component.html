@@ -6,7 +6,7 @@
 
 <div class="axis-container">
   <div *ngFor="let info of axesInfo" class="axis-item">
-    <app-axis-configuration [axisInfo]="info" [axis]="config.axes[info.id]" (axisChange)="updateAxis(info.id, $event)"></app-axis-configuration>
+    <app-axis-configuration [axisInfo]="info" [paths]="paths" [axis]="config.axes[info.id]" (axisChange)="updateAxis(info.id, $event)"></app-axis-configuration>
   </div>
 </div>
 

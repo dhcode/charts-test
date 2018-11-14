@@ -14,7 +14,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatLineModule,
-  MatListModule,
+  MatListModule, MatMenuModule,
   MatSelectModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
@@ -34,6 +34,7 @@ import { AxisConfigurationComponent } from './axis-configuration/axis-configurat
     MatSelectModule,
     MatExpansionModule,
     MatListModule,
+    MatMenuModule,
     MatLineModule,
     MatDividerModule,
     MatCardModule,
@@ -58,4 +59,5 @@ import { AxisConfigurationComponent } from './axis-configuration/axis-configurat
     ConfiguredChartComponent
   ]
 })
-export class ConfigurableChartsModule { }
+export class ConfigurableChartsModule {
+}

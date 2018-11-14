@@ -48,6 +48,7 @@ export interface AxisInfo {
   id: string;
   label: string;
   required: boolean;
+  maxTraces: number;
   allowedFormats: OutputFormat[];
   options: ChartOption[];
 }

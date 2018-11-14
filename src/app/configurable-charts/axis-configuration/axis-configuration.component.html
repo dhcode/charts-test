@@ -26,6 +26,36 @@
         </button>
       </div>
 
+      <mat-list>
+        <h3 mat-subheader>Traces</h3>
+        <mat-list-item *ngFor="let trace of _axis.traces">
+          <mat-icon matListIcon>timeline</mat-icon>
+          <div matLine>
+            <b matLine> {{trace.label}} </b>
+            <div matLine>{{trace.path}}</div>
+          </div>
+          <button mat-button [matMenuTriggerFor]="traceMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #traceMenu="matMenu">
+            <button mat-menu-item>Settings</button>
+            <button mat-menu-item (click)="removeTrace(trace)">Remove</button>
+          </mat-menu>
+
+        </mat-list-item>
+      </mat-list>
+
+      <button mat-button [matMenuTriggerFor]="addMenu" *ngIf="canAddTraces">
+        <mat-icon>add</mat-icon>
+        Add Trace
+      </button>
+
+      <mat-menu #addMenu="matMenu">
+        <button mat-menu-item *ngFor="let path of paths" (click)="addTraceByPath(path)">
+          {{path.path}} <span class="muted-text">({{path.types.join(', ')}})</span>
+        </button>
+      </mat-menu>
+
     </form>
 
   </mat-card-content>

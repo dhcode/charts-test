@@ -37,10 +37,13 @@ function generateData(count: number) {
   const start = new Date().getTime();
   for (let i = 0; i < count; i++) {
     result.push({
-      time: new Date(start + 1000 * i).toISOString(),
-      count: Math.round(Math.random() * 100),
-      factor: Math.random() * 10,
-      state: Math.random() > 0.5
+      info: {
+        time: new Date(start + 1000 * i).toISOString(),
+        count: Math.round(Math.random() * 100),
+        factor: Math.random() * 10,
+        state: Math.random() > 0.5
+      },
+      category: Math.random() > 0.5 ? 'a' : 'b'
     });
   }
   return result;
