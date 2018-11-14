@@ -29,6 +29,8 @@ export class AxisConfigurationComponent implements OnInit {
 
   canAddTraces = false;
 
+  incomplete = true;
+
   constructor(private dialog: MatDialog) {
   }
 
@@ -67,6 +69,7 @@ export class AxisConfigurationComponent implements OnInit {
     if (this.axisInfo) {
       this.canAddTraces = this._axis.traces.length < this.axisInfo.maxTraces;
       this.formatters = outputFormatters.filter(f => this.axisInfo.allowedFormats.includes(f.format));
+      this.incomplete = this.axisInfo.required && this._axis.traces.length === 0;
     }
     this.formatter = getFormatter(this._axis);
   }

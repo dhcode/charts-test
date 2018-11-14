@@ -4,10 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href /charts-test --output-path docs",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
+  },
+  "repository": {
+    "type": "git",
+    "license": "MIT",
+    "url": "https://github.com/dhcode/charts-test.git"
   },
   "private": true,
   "dependencies": {
