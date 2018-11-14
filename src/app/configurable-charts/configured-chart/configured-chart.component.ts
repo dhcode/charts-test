@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleC
 import { ChartConfig } from '../lib/models/chart-config';
 import { ChartTypeConfigurer } from '../lib/models/chart-types';
 import { getChartTypeConfigurer } from '../lib/chart-configurers';
-import * as Plotly from 'plotly.js/dist/plotly.js';
+import * as Plotly from 'plotly.js/dist/plotly.min.js';
 
 @Component({
   selector: 'app-configured-chart',

@@ -18,7 +18,7 @@ export class FormatOptionsDialogComponent implements OnInit {
   ];
 
   constructor(public dialogRef: MatDialogRef<FormatOptionsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private column: AxisConfig) {
+              @Inject(MAT_DIALOG_DATA) public column: AxisConfig) {
   }
 
   ngOnInit() {

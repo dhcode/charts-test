@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href /charts-test --output-path docs",
+    "build": "ng build --base-href /charts-test --output-path docs --prod --progress --output-hashing=none",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -29,8 +29,8 @@
     "@angular/router": "~7.0.0",
     "@types/c3": "^0.6.2",
     "angular-plotly.js": "^0.1.15",
-    "c3": "^0.6.8",
     "core-js": "^2.5.4",
+    "d3": "^5.7.0",
     "plotly.js": "^1.42.5",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"
