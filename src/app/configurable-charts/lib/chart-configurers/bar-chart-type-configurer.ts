@@ -1,35 +1,27 @@
-import { getValueByPath } from '../chart-type-utils';
 import { AxisInfo, ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
-import { getFormatter } from '../chart-data-formatters';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
+import { getFormatter } from '../chart-data-formatters';
+import { getValueByPath } from '../chart-type-utils';
 
-export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
-  type: ChartType = 'timeseries';
-  label = 'Time series';
+export class BarChartTypeConfigurer implements ChartTypeConfigurer {
+  label = 'Bar';
+  type: ChartType = 'bar';
 
   private axesInfo: AxisInfo[] = [
     {
       id: 'x',
-      label: 'X - Axis',
+      label: 'Bars',
       required: true,
       maxTraces: 1,
-      allowedFormats: ['datetime'],
+      allowedFormats: ['string'],
       options: []
     },
     {
       id: 'y',
-      label: 'Y - Axis',
+      label: 'Values',
       required: true,
       maxTraces: 10,
-      allowedFormats: ['number', 'boolean'],
-      options: []
-    },
-    {
-      id: 'y2',
-      label: 'Y2 - Axis',
-      required: false,
-      maxTraces: 10,
-      allowedFormats: ['number', 'boolean'],
+      allowedFormats: ['number'],
       options: []
     }
   ];
@@ -42,7 +34,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     const xAxis: AxisConfig = {
       traces: [],
       label: '',
-      format: 'datetime',
+      format: 'string',
       formatOptions: {}
     };
     const yAxis: AxisConfig = {
@@ -51,16 +43,9 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       format: 'number',
       formatOptions: {}
     };
-    const y2Axis: AxisConfig = {
-      traces: [],
-      label: '',
-      format: 'number',
-      formatOptions: {}
-    };
     return {
       x: xAxis,
       y: yAxis,
-      y2: y2Axis
     };
   }
 
@@ -71,7 +56,6 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
   createConfig(axes: AxesConfig, options: ChartTypeOptions): any {
     const xAxis: AxisConfig = axes.x;
     const yAxis: AxisConfig = axes.y;
-    const y2Axis: AxisConfig = axes.y2;
 
     if (!xAxis.traces.length) {
       throw new Error('Missing traces for ' + this.axesInfo[0].label);
@@ -92,41 +76,20 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       },
     };
 
-    if (y2Axis.traces.length) {
-      layout['yaxis2'] = {
-        ...getFormatter(y2Axis).getOutputTickOptions(y2Axis.formatOptions),
-        title: y2Axis.label,
-        side: 'right',
-        overlaying: 'y'
-      };
-    }
 
-    const data = [
-      ...this.getTraces('y', yAxis),
-      ...this.getTraces('y2', y2Axis)
-    ];
+    const data = yAxis.traces.map(trace => {
+      return {
+        x: [],
+        y: [],
+        name: trace.label,
+        type: trace.type || 'bar',
+      };
+    });
 
     return {
       data: data,
       layout: layout
     };
-  }
-
-  private getTraces(axisId: string, axis: AxisConfig): any[] {
-    return axis.traces.map(trace => {
-      const chartTrace = {
-        x: [],
-        y: [],
-        name: trace.label,
-        type: trace.type || 'scatter',
-        mode: 'lines+markers',
-        yaxis: axisId
-      };
-      if (axis.format === 'boolean') {
-        chartTrace['line'] = {shape: 'hv'};
-      }
-      return chartTrace;
-    });
   }
 
   createDataConfig(axes: AxesConfig, options: ChartTypeOptions, sourceData: any[]): any {
@@ -139,15 +102,11 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       const xFormatter = getFormatter(axes.x);
       const xTrace: TraceConfig = axes.x.traces[0];
 
-      const axisIds = ['y', 'y2'];
       let t = 0;
-      for (const axisId of axisIds) {
-        const axis = axes[axisId];
-        for (const trace of axis.traces) {
-          indices.push(t);
-          data.y.push(new Array(sourceData.length));
-          t++;
-        }
+      for (const trace of axes.y.traces) {
+        indices.push(t);
+        data.y.push(new Array(sourceData.length));
+        t++;
       }
 
       let i = 0;
@@ -156,14 +115,12 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
         const time = getValueByPath(d, xTrace.path.split('.'));
         xValues[i] = xFormatter.toInternalValue(time, axes.x.formatOptions);
         t = 0;
-        for (const axisId of axisIds) {
-          const axis = axes[axisId];
-          const formatter = getFormatter(axis);
-          for (const trace of axis.traces) {
-            const value = getValueByPath(d, trace.path.split('.'));
-            data.y[t][i] = formatter.toInternalValue(value, axis.formatOptions);
-            t++;
-          }
+        const axis = axes.y;
+        const formatter = getFormatter(axis);
+        for (const trace of axis.traces) {
+          const value = getValueByPath(d, trace.path.split('.'));
+          data.y[t][i] = formatter.toInternalValue(value, axis.formatOptions);
+          t++;
         }
         i++;
       }
@@ -178,5 +135,6 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       indices: indices
     };
   }
+
 
 }

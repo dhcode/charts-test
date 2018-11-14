@@ -64,7 +64,7 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
       this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config['data'], config['layout']);
       this.error = null;
     } catch (e) {
-      console.error(e);
+      console.warn(e);
       this.error = e;
     }
 
@@ -80,7 +80,7 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
       Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
       this.error = null;
     } catch (e) {
-      console.error(e);
+      console.warn(e);
       this.error = e;
     }
 

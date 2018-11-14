@@ -51,7 +51,7 @@
       </button>
 
       <mat-menu #addMenu="matMenu">
-        <button mat-menu-item *ngFor="let path of paths" (click)="addTraceByPath(path)">
+        <button mat-menu-item *ngFor="let path of paths" (click)="addTraceByPath(path)" [disabled]="!isUsablePath(path)">
           {{path.path}} <span class="muted-text">({{path.types.join(', ')}})</span>
         </button>
       </mat-menu>

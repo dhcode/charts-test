@@ -3,7 +3,7 @@ import { AxisConfig, TraceConfig } from '../lib/models/chart-config';
 import { AxisInfo } from '../lib/models/chart-types';
 import { ChartDataFormatter, OutputFormat } from '../lib/models/data-formatter';
 import { getDefaultFormatOptions } from '../lib/chart-config-utils';
-import { outputFormatters } from '../lib/chart-data-formatters';
+import { getFormatter, outputFormatters } from '../lib/chart-data-formatters';
 import { PathInfo } from '../lib/models/path-info';
 import { FormatOptionsDialogComponent } from './format-options-dialog/format-options-dialog.component';
 import { MatDialog } from '@angular/material';
@@ -23,7 +23,9 @@ export class AxisConfigurationComponent implements OnInit {
 
   _axis: AxisConfig;
 
-  formatters: ChartDataFormatter[] = outputFormatters;
+  formatters: ChartDataFormatter[];
+
+  private formatter: ChartDataFormatter;
 
   canAddTraces = false;
 
@@ -64,7 +66,9 @@ export class AxisConfigurationComponent implements OnInit {
   updateSelection() {
     if (this.axisInfo) {
       this.canAddTraces = this._axis.traces.length < this.axisInfo.maxTraces;
+      this.formatters = outputFormatters.filter(f => this.axisInfo.allowedFormats.includes(f.format));
     }
+    this.formatter = getFormatter(this._axis);
   }
 
   addTraceByPath(pathInfo: PathInfo) {
@@ -85,6 +89,10 @@ export class AxisConfigurationComponent implements OnInit {
   notifyChange() {
     this.updateSelection();
     this.axisChange.next(this._axis);
+  }
+
+  isUsablePath(pathInfo: PathInfo): boolean {
+    return pathInfo.types.some(type => this.formatter.getInputTypePriority(type, pathInfo.values) !== null);
   }
 
 }
