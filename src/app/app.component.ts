@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'charts-test';
-  data = generateData(10);
+  data = generateData(100);
 
   public graph = {
     data: [

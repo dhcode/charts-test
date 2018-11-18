@@ -45,18 +45,55 @@ export interface ChartTypeConfigurer {
 }
 
 export interface AxisInfo {
+  /**
+   * Name of the axis, which is part of a Chart Type
+   */
   id: string;
+  /**
+   * Display name of the axis
+   */
   label: string;
+  /**
+   * Whether the axis is required
+   */
   required: boolean;
+  /**
+   * How many traces it should have as maximum
+   */
   maxTraces: number;
+  /**
+   * The allowed formats for the axis
+   */
   allowedFormats: OutputFormat[];
+  /**
+   * The options the user can choose for the axis
+   */
   options: ChartOption[];
 }
 
 export interface ChartOption {
+  /**
+   * Technical name of the option
+   */
   name: string;
+  /**
+   * Label that describes the option
+   */
   label: string;
+  /**
+   * Hint that describes more details
+   */
+  hint?: string;
+  /**
+   * The type decided how the options input is presented
+   */
   type: ChartOptionType;
-  selectionValues: any[];
+  /**
+   * If there are only some values to select from
+   */
+  selectionValues?: any[];
+  /**
+   * The default value
+   */
   defaultValue: any;
 }

@@ -4,7 +4,8 @@ import { PathSelectorComponent } from './axis-configuration/path-selector/path-s
 import { FormatOptionsDialogComponent } from './axis-configuration/format-options-dialog/format-options-dialog.component';
 import { ConfiguredChartComponent } from './configured-chart/configured-chart.component';
 import {
-  MatButtonModule, MatButtonToggleModule,
+  MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,
   MatDialogModule,
@@ -14,12 +15,12 @@ import {
   MatIconModule,
   MatInputModule,
   MatLineModule,
-  MatListModule, MatMenuModule,
+  MatListModule,
+  MatMenuModule,
   MatSelectModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ChartConfigurationComponent } from './chart-configuration/chart-configuration.component';
-import { PlotlyModule } from 'angular-plotly.js';
 import { D3FormatPipe } from './pipes/d3-format.pipe';
 import { AxisConfigurationComponent } from './axis-configuration/axis-configuration.component';
 
@@ -27,7 +28,6 @@ import { AxisConfigurationComponent } from './axis-configuration/axis-configurat
   imports: [
     CommonModule,
     FormsModule,
-    PlotlyModule,
     MatGridListModule,
     MatCheckboxModule,
     MatInputModule,

@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href /charts-test/ --output-path docs --prod --progress --output-hashing=none",
+    "build-stats": "ng build --prod --progress --stats-json",
+    "bundle-report": "webpack-bundle-analyzer dist/charts-test/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,8 +29,6 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
-    "@types/c3": "^0.6.2",
-    "angular-plotly.js": "^0.1.15",
     "core-js": "^2.5.4",
     "d3": "^5.7.0",
     "plotly.js": "^1.42.5",
@@ -40,9 +40,9 @@
     "@angular/cli": "~7.0.2",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -54,6 +54,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.1"
+    "typescript": "~3.1.1",
+    "webpack-bundle-analyzer": "^3.0.3"
   }
 }
