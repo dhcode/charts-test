@@ -676,13 +676,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @angular/material/button
 
+@angular/material/slide-toggle
+
+@angular/material/checkbox
+
 @angular/material/button-toggle
 
 @angular/material/icon
 
-@angular/material/list
-
 @angular/material/menu
+
+@angular/material/list
 
 @angular/material/card
 
