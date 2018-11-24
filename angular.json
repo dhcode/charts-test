@@ -29,7 +29,10 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "lazyModules": [
+              "src/app/configurable-charts/configured-chart/plotly-chart/plotly-chart.module"
+            ]
           },
           "configurations": {
             "production": {

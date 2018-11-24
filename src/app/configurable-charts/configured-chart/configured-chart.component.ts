@@ -1,17 +1,27 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component, ComponentRef,
+  ElementRef, Injector,
+  Input,
+  NgModuleFactoryLoader,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild, ViewContainerRef
+} from '@angular/core';
 import { ChartConfig } from '../lib/models/chart-config';
 import { ChartTypeConfigurer } from '../lib/models/chart-types';
 import { getChartTypeConfigurer } from '../lib/chart-configurers';
-import Plotly from 'plotly.js/lib/index-basic';
+import { CHART_COMPONENT, ChartComponentBase } from './configured-chart.model';
 
 @Component({
   selector: 'app-configured-chart',
   templateUrl: './configured-chart.component.html',
   styleUrls: ['./configured-chart.component.scss']
 })
-export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewInit {
+export class ConfiguredChartComponent implements OnInit, OnChanges {
 
-  @ViewChild('chartContainer') chartContainer: ElementRef;
+  @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
 
   @Input() config: ChartConfig;
 
@@ -21,71 +31,50 @@ export class ConfiguredChartComponent implements OnInit, OnChanges, AfterViewIni
 
   private configurer: ChartTypeConfigurer;
 
-  private chart: any;
+  private chartRef: ComponentRef<ChartComponentBase>;
 
-  constructor() {
+  private initializedType = null;
+
+  constructor(private loader: NgModuleFactoryLoader, private injector: Injector) {
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.config && !changes.config.firstChange) {
-      this.buildChart();
-      this.updateData();
-    } else if (changes.data && !changes.data.firstChange) {
-      this.updateData();
+    if (changes.config && this.config && this.config.type) {
+      this.configurer = getChartTypeConfigurer(this.config.type);
+      this.initChartModule();
     }
 
   }
 
-  ngAfterViewInit(): void {
-    this.buildChart();
-    this.updateData();
+  updateInputs() {
+    this.chartRef.instance.config = this.config;
+    this.chartRef.instance.data = this.data;
+    this.chartRef.instance.configurer = this.configurer;
   }
 
-  buildChart() {
-    if (!this.chartContainer || !this.config || !this.data || !this.config.type) {
+  initChartModule() {
+    if (this.initializedType === this.config.type && this.chartRef) {
+      this.updateInputs();
       return;
     }
+    this.initializedType = this.config.type;
+    const basePath = 'src/app/configurable-charts/configured-chart';
+    this.loader.load(basePath + '/plotly-chart/plotly-chart.module#PlotlyChartModule').then(factory => {
+      const module = factory.create(this.injector);
+      const cfr = module.componentFactoryResolver;
+      const componentType = module.injector.get(CHART_COMPONENT);
+      const componentFactory = cfr.resolveComponentFactory(componentType);
 
-    console.log('buildChart');
+      this.chartRef = this.container.createComponent(componentFactory);
+      this.updateInputs();
 
-    this.configurer = getChartTypeConfigurer(this.config.type);
-
-    try {
-      const config = {
-        config: {},
-        ...this.configurer.createConfig(this.config.axes, this.config.chartOptions)
-      };
-
-      console.log('chartConfig', config);
-
-      this.chart = Plotly.newPlot(this.chartContainer.nativeElement, config['data'], config['layout']);
-      this.error = null;
-    } catch (e) {
-      console.warn(e);
-      this.error = e;
-      Plotly.purge(this.chartContainer.nativeElement);
-    }
-
-
-  }
-
-  updateData() {
-    if (!this.chart) {
-      return;
-    }
-    try {
-      const dataConfig = this.configurer.createDataConfig(this.config.axes, this.config.chartOptions, this.data);
-      Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
-      this.error = null;
-    } catch (e) {
-      console.warn(e);
-      this.error = e;
-      Plotly.purge(this.chartContainer.nativeElement);
-    }
-
+    }, error => {
+      console.error(error);
+      this.error = error.toString();
+    });
   }
 
 

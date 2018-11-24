@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ChartOption, ChartOptionValues } from '../../lib/models/chart-options';
 import { stringOpt } from '../../lib/chart-option-utils';
-import { TraceConfig } from '../../lib/models/chart-config';
 
 @Component({
   selector: 'app-trace-options-dialog',

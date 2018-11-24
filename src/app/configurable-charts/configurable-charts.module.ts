@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NgModuleFactoryLoader, SystemJsNgModuleLoader } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PathSelectorComponent } from './axis-configuration/path-selector/path-selector.component';
 import { FormatOptionsDialogComponent } from './axis-configuration/format-options-dialog/format-options-dialog.component';
@@ -65,6 +65,9 @@ import { TraceOptionsDialogComponent } from './axis-configuration/trace-options-
     ChartConfigurationComponent,
     ConfiguredChartComponent,
     ChartOptionsFormComponent
+  ],
+  providers: [
+    {provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader}
   ]
 })
 export class ConfigurableChartsModule {
