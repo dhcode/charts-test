@@ -1,5 +1,6 @@
-import { ChartType, ChartTypeOptions } from './chart-types';
+import { ChartType} from './chart-types';
 import { OutputFormat, OutputFormatOptions } from './data-formatter';
+import { ChartOptionValues } from './chart-options';
 
 /**
  * Savable chart configuration
@@ -19,7 +20,7 @@ export interface ChartConfig {
   /**
    * Chart type specific configuration options
    */
-  chartOptions: ChartTypeOptions;
+  chartOptions: ChartOptionValues;
 }
 
 export interface AxesConfig {
@@ -59,10 +60,6 @@ export interface TraceConfig {
    */
   label: string;
   /**
-   * Optional color for the series
-   */
-  color?: string;
-  /**
    * optional different type than the ChartType
    */
   type?: string;
@@ -70,9 +67,5 @@ export interface TraceConfig {
   /**
    * Custom options for the trace
    */
-  options: TraceOptions;
-}
-
-export interface TraceOptions {
-  [key: string]: any;
+  options: ChartOptionValues;
 }

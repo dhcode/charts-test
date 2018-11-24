@@ -1,12 +1,8 @@
-import { AxesConfig, AxisConfig } from './chart-config';
+import { AxesConfig } from './chart-config';
 import { OutputFormat } from './data-formatter';
+import { ChartOption, ChartOptionValues } from './chart-options';
 
 export type ChartType = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
-export type ChartOptionType = 'int' | 'string' | 'decimal' | 'boolean';
-
-export interface ChartTypeOptions {
-  [key: string]: any;
-}
 
 export interface ChartTypeConfigurer {
   /**
@@ -17,6 +13,11 @@ export interface ChartTypeConfigurer {
    * Label which is displayed for the user when selecting the chart type
    */
   label: string;
+
+  /**
+   * Options definition for the whole chart
+   */
+  optionsDef?: ChartOption[];
 
   /**
    * Information about the available axes
@@ -31,17 +32,17 @@ export interface ChartTypeConfigurer {
   /**
    * Generate the default options for this chart type
    */
-  getDefaultOptions(): ChartTypeOptions;
+  getDefaultOptions(): ChartOptionValues;
 
   /**
    * Create the config for the chart library
    */
-  createConfig(axes: AxesConfig, options: ChartTypeOptions): any;
+  createConfig(axes: AxesConfig, options: ChartOptionValues): any;
 
   /**
    * Creates the data to load in the chart
    */
-  createDataConfig(axes: AxesConfig, options: ChartTypeOptions, data: any[]): any;
+  createDataConfig(axes: AxesConfig, options: ChartOptionValues, data: any[]): any;
 }
 
 export interface AxisInfo {
@@ -68,32 +69,12 @@ export interface AxisInfo {
   /**
    * The options the user can choose for the axis
    */
-  options: ChartOption[];
+  optionsDef?: ChartOption[];
+
+  /**
+   * Options for each trace
+   */
+  tracesDef?: ChartOption[];
+
 }
 
-export interface ChartOption {
-  /**
-   * Technical name of the option
-   */
-  name: string;
-  /**
-   * Label that describes the option
-   */
-  label: string;
-  /**
-   * Hint that describes more details
-   */
-  hint?: string;
-  /**
-   * The type decided how the options input is presented
-   */
-  type: ChartOptionType;
-  /**
-   * If there are only some values to select from
-   */
-  selectionValues?: any[];
-  /**
-   * The default value
-   */
-  defaultValue: any;
-}

@@ -19,15 +19,17 @@ import {
   MatMenuModule,
   MatSelectModule
 } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartConfigurationComponent } from './chart-configuration/chart-configuration.component';
 import { D3FormatPipe } from './pipes/d3-format.pipe';
 import { AxisConfigurationComponent } from './axis-configuration/axis-configuration.component';
+import { ChartOptionsFormComponent } from './chart-options-form/chart-options-form.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatGridListModule,
     MatCheckboxModule,
     MatInputModule,
@@ -50,6 +52,7 @@ import { AxisConfigurationComponent } from './axis-configuration/axis-configurat
     ChartConfigurationComponent,
     D3FormatPipe,
     AxisConfigurationComponent,
+    ChartOptionsFormComponent,
   ],
   entryComponents: [
     FormatOptionsDialogComponent

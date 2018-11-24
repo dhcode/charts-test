@@ -1,7 +1,8 @@
-import { AxisInfo, ChartType, ChartTypeConfigurer, ChartTypeOptions } from '../models/chart-types';
+import { AxisInfo, ChartType, ChartTypeConfigurer} from '../models/chart-types';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 import { getFormatter } from '../chart-data-formatters';
 import { getValueByPath } from '../chart-type-utils';
+import { ChartOptionValues } from '../models/chart-options';
 
 export class BarChartTypeConfigurer implements ChartTypeConfigurer {
   label = 'Bar';
@@ -14,7 +15,7 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
       required: true,
       maxTraces: 1,
       allowedFormats: ['string'],
-      options: []
+      optionsDef: []
     },
     {
       id: 'y',
@@ -22,7 +23,7 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
       required: true,
       maxTraces: 10,
       allowedFormats: ['number'],
-      options: []
+      optionsDef: []
     }
   ];
 
@@ -49,11 +50,11 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  getDefaultOptions(): ChartTypeOptions {
+  getDefaultOptions(): ChartOptionValues {
     return {};
   }
 
-  createConfig(axes: AxesConfig, options: ChartTypeOptions): any {
+  createConfig(axes: AxesConfig, options: ChartOptionValues): any {
     const xAxis: AxisConfig = axes.x;
     const yAxis: AxisConfig = axes.y;
 
@@ -92,7 +93,7 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  createDataConfig(axes: AxesConfig, options: ChartTypeOptions, sourceData: any[]): any {
+  createDataConfig(axes: AxesConfig, options: ChartOptionValues, sourceData: any[]): any {
     const indices = [];
     const data = {
       x: [],
