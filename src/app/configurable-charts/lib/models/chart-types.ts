@@ -74,7 +74,7 @@ export interface AxisInfo {
   /**
    * Options for each trace
    */
-  tracesDef?: ChartOption[];
+  traceOptionsDef?: ChartOption[];
 
 }
 

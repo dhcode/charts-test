@@ -38,7 +38,7 @@ const axesInfo: AxisInfo[] = [
     required: true,
     maxTraces: 10,
     allowedFormats: ['number', 'boolean'],
-    optionsDef: dataTraceOptions
+    traceOptionsDef: dataTraceOptions
   },
   {
     id: 'y2',
@@ -46,7 +46,7 @@ const axesInfo: AxisInfo[] = [
     required: false,
     maxTraces: 10,
     allowedFormats: ['number', 'boolean'],
-    optionsDef: dataTraceOptions
+    traceOptionsDef: dataTraceOptions
   }
 ];
 

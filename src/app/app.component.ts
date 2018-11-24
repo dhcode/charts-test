@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ChartOption} from './configurable-charts/lib/models/chart-options';
+import {booleanOpt, colorOpt, stringOpt} from './configurable-charts/lib/chart-option-utils';
 
 @Component({
   selector: 'app-root',

@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AxisConfig, TraceConfig } from '../lib/models/chart-config';
-import { AxisInfo } from '../lib/models/chart-types';
-import { ChartDataFormatter, OutputFormat } from '../lib/models/data-formatter';
-import { getDefaultFormatOptions } from '../lib/chart-config-utils';
-import { getFormatter, outputFormatters } from '../lib/chart-data-formatters';
-import { PathInfo } from '../lib/models/path-info';
-import { FormatOptionsDialogComponent } from './format-options-dialog/format-options-dialog.component';
-import { MatDialog } from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AxisConfig, TraceConfig} from '../lib/models/chart-config';
+import {AxisInfo} from '../lib/models/chart-types';
+import {ChartDataFormatter, OutputFormat} from '../lib/models/data-formatter';
+import {getDefaultFormatOptions} from '../lib/chart-config-utils';
+import {getFormatter, outputFormatters} from '../lib/chart-data-formatters';
+import {PathInfo} from '../lib/models/path-info';
+import {FormatOptionsDialogComponent} from './format-options-dialog/format-options-dialog.component';
+import {MatDialog} from '@angular/material';
+import {TraceOptionsDialogComponent} from './trace-options-dialog/trace-options-dialog.component';
 
 @Component({
   selector: 'app-axis-configuration',
@@ -87,6 +88,22 @@ export class AxisConfigurationComponent implements OnInit {
   removeTrace(trace: TraceConfig) {
     this._axis.traces.splice(this._axis.traces.indexOf(trace), 1);
     this.notifyChange();
+  }
+
+  openTraceOptions(trace: TraceConfig) {
+    const dialogRef = this.dialog.open(TraceOptionsDialogComponent, {
+      data: {
+        optionsDef: this.axisInfo.traceOptionsDef,
+        options: trace.options
+      },
+      minWidth: 300
+    });
+    dialogRef.afterClosed().subscribe(traceOptions => {
+      if (traceOptions) {
+        trace.options = traceOptions;
+        this.notifyChange();
+      }
+    });
   }
 
   notifyChange() {

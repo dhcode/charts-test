@@ -1,22 +1,25 @@
 <form [formGroup]="form">
 
-  <mat-form-field *ngFor="let option of options">
+  <ng-container *ngFor="let option of _options">
     <ng-container *ngIf="option.type === 'string'">
-      <input matInput [placeholder]="option.label" [formControlName]="option.name">
+      <mat-form-field class="full-width">
+        <input matInput [placeholder]="option.label" [formControlName]="option.name">
+      </mat-form-field>
     </ng-container>
-    <ng-container *ngIf="option.type === 'int'">
-      <input matInput [placeholder]="option.label" [formControlName]="option.name" type="number">
-    </ng-container>
-    <ng-container *ngIf="option.type === 'decimal'">
-      <input matInput [placeholder]="option.label" [formControlName]="option.name" type="number">
+    <ng-container *ngIf="option.type === 'int' || option.type === 'decimal'">
+      <mat-form-field class="full-width">
+        <input matInput [placeholder]="option.label" [formControlName]="option.name" type="number">
+      </mat-form-field>
     </ng-container>
     <ng-container *ngIf="option.type === 'color'">
-      <input matInput [placeholder]="option.label" [formControlName]="option.name" type="color">
+      <mat-form-field>
+        <input matInput [placeholder]="option.label" [formControlName]="option.name" type="color">
+      </mat-form-field>
     </ng-container>
     <ng-container *ngIf="option.type === 'boolean'">
       <mat-checkbox [formControlName]="option.name">{{option.label}}</mat-checkbox>
     </ng-container>
 
-  </mat-form-field>
+  </ng-container>
 
 </form>

@@ -24,6 +24,7 @@ import { ChartConfigurationComponent } from './chart-configuration/chart-configu
 import { D3FormatPipe } from './pipes/d3-format.pipe';
 import { AxisConfigurationComponent } from './axis-configuration/axis-configuration.component';
 import { ChartOptionsFormComponent } from './chart-options-form/chart-options-form.component';
+import { TraceOptionsDialogComponent } from './axis-configuration/trace-options-dialog/trace-options-dialog.component';
 
 @NgModule({
   imports: [
@@ -53,13 +54,16 @@ import { ChartOptionsFormComponent } from './chart-options-form/chart-options-fo
     D3FormatPipe,
     AxisConfigurationComponent,
     ChartOptionsFormComponent,
+    TraceOptionsDialogComponent,
   ],
   entryComponents: [
-    FormatOptionsDialogComponent
+    FormatOptionsDialogComponent,
+    TraceOptionsDialogComponent
   ],
   exports: [
     ChartConfigurationComponent,
-    ConfiguredChartComponent
+    ConfiguredChartComponent,
+    ChartOptionsFormComponent
   ]
 })
 export class ConfigurableChartsModule {

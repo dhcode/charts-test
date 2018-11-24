@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ChartOption, ChartOptionValues } from '../lib/models/chart-options';
-import { FormControl, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChartOption, ChartOptionValues} from '../lib/models/chart-options';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-chart-options-form',
@@ -9,17 +9,28 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class ChartOptionsFormComponent implements OnInit {
 
-  @Input() options: ChartOption[];
+  _options: ChartOption[] = [];
+  _values: ChartOptionValues;
   @Output() valuesChange = new EventEmitter<ChartOptionValues>();
 
   form: FormGroup;
 
   constructor() {
-    this.createForm();
   }
 
   @Input() set values(v: ChartOptionValues) {
-    this.form.patchValue(v);
+    this._values = v;
+    if (this.form) {
+      this.form.patchValue(v);
+    }
+  }
+
+  @Input() set options(o: ChartOption[]) {
+    this._options = o;
+    this.createForm();
+    if (this._values) {
+      this.form.patchValue(this._values);
+    }
   }
 
   ngOnInit() {
@@ -33,7 +44,7 @@ export class ChartOptionsFormComponent implements OnInit {
 
     const formControls = {};
 
-    for (const option of this.options) {
+    for (const option of this._options) {
       formControls[option.name] = new FormControl(option.defaultValue);
     }
 

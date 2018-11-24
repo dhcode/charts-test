@@ -41,7 +41,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #traceMenu="matMenu">
-            <button mat-menu-item>Settings</button>
+            <button mat-menu-item (click)="openTraceOptions(trace)" *ngIf="axisInfo.traceOptionsDef">Settings</button>
             <button mat-menu-item (click)="removeTrace(trace)">Remove</button>
           </mat-menu>
 
