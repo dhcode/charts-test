@@ -25,6 +25,7 @@ export class PlotlyChartComponent implements OnInit, DoCheck, AfterViewInit, Cha
 
   private _config: ChartConfig;
   private _data: any[];
+  private _length = 0;
 
   private _error = null;
 
@@ -38,10 +39,12 @@ export class PlotlyChartComponent implements OnInit, DoCheck, AfterViewInit, Cha
     if (this.config !== this._config) {
       this._config = this.config;
       this.buildChart();
-      this.updateData();
+      this.updateData(true);
     }
     if (this.data !== this._data) {
       this._data = this.data;
+      this.updateData(true);
+    } else if (this.data && this.data.length !== this._length) {
       this.updateData();
     }
     if (!this._error !== this.error) {
@@ -79,13 +82,18 @@ export class PlotlyChartComponent implements OnInit, DoCheck, AfterViewInit, Cha
 
   }
 
-  updateData() {
+  updateData(reset = false) {
     if (!this.chart) {
       return;
     }
     try {
+      this._length = this._data.length;
       const dataConfig = this.configurer.createDataConfig(this._config.axes, this._config.chartOptions, this._data);
-      Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
+      if (reset) {
+        Plotly.update(this.chartContainer.nativeElement, dataConfig.data, null, dataConfig.indices);
+      } else {
+        Plotly.extendTraces(this.chartContainer.nativeElement, dataConfig.data, dataConfig.indices);
+      }
       this._error = null;
     } catch (e) {
       console.warn(e);

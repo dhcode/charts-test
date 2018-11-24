@@ -1,8 +1,13 @@
-import { AxisInfo, ChartType, ChartTypeConfigurer} from '../models/chart-types';
+import { AxisInfo, ChartType, ChartTypeConfigurer } from '../models/chart-types';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 import { getFormatter } from '../chart-data-formatters';
 import { getValueByPath } from '../chart-type-utils';
-import { ChartOptionValues } from '../models/chart-options';
+import { ChartOption, ChartOptionValues } from '../models/chart-options';
+import { colorOpt, stringOpt } from '../chart-option-utils';
+
+const dataTraceOptions: ChartOption[] = [
+  colorOpt('color', 'Color', null),
+];
 
 export class BarChartTypeConfigurer implements ChartTypeConfigurer {
   label = 'Bar';
@@ -23,7 +28,8 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
       required: true,
       maxTraces: 10,
       allowedFormats: ['number'],
-      optionsDef: []
+      optionsDef: [],
+      traceOptionsDef: dataTraceOptions
     }
   ];
 
@@ -79,12 +85,17 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
 
 
     const data = yAxis.traces.map(trace => {
-      return {
+      const barTrace = {
         x: [],
         y: [],
         name: trace.label,
         type: trace.type || 'bar',
+        marker: {}
       };
+      if (trace.options.color) {
+        barTrace.marker['color'] = trace.options.color;
+      }
+      return barTrace;
     });
 
     return {

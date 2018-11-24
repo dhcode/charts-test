@@ -1,15 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {ChartOption} from './configurable-charts/lib/models/chart-options';
-import {booleanOpt, colorOpt, stringOpt} from './configurable-charts/lib/chart-option-utils';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ChartOption } from './configurable-charts/lib/models/chart-options';
+import { booleanOpt, colorOpt, stringOpt } from './configurable-charts/lib/chart-option-utils';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, DoCheck {
   title = 'charts-test';
-  data = generateData(100);
+
+  data: any;
+
+  dataOptions = [10, 100, 500, 1000, 10000, 100000];
+  count = this.dataOptions[0];
+
+  private _count;
 
   public graph = {
     data: [
@@ -31,6 +37,21 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('generated data', this.data);
+  }
+
+  ngDoCheck(): void {
+    if (this.count !== this._count) {
+      this._count = this.count;
+      this.data = generateData(this._count);
+      console.log('generated data', this.data);
+    }
+  }
+
+
+  chooseData(count) {
+    if (count) {
+      this.count = count;
+    }
   }
 
 }

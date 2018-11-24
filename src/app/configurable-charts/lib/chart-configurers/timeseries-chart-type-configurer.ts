@@ -56,7 +56,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
   label = 'Time series';
 
   optionsDef: ChartOption[] = [
-    stringOpt('mode', 'Display mode', 'lines+markers', modes)
+    stringOpt('mode', 'Display mode', 'lines', modes)
   ];
 
   getAxesInfo(): AxisInfo[] {

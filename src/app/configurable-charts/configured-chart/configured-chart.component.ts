@@ -42,7 +42,7 @@ export class ConfiguredChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.config && this.config && this.config.type) {
+    if (this.config && this.config.type) {
       this.configurer = getChartTypeConfigurer(this.config.type);
       this.initChartModule();
     }
@@ -59,6 +59,9 @@ export class ConfiguredChartComponent implements OnInit, OnChanges {
     if (this.initializedType === this.config.type && this.chartRef) {
       this.updateInputs();
       return;
+    } else if (this.chartRef) {
+      this.container.clear();
+      this.chartRef = null;
     }
     this.initializedType = this.config.type;
     const basePath = 'src/app/configurable-charts/configured-chart';

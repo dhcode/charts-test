@@ -1,3 +1,13 @@
+<div style="margin-bottom: 1em">
+  Data amount:
+  <mat-button-toggle-group [value]="count" (valueChange)="chooseData($event)">
+    <mat-button-toggle *ngFor="let count of dataOptions" [value]="count">
+      {{count}}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+
 <app-chart-configuration [data]="data"></app-chart-configuration>
 
 <router-outlet></router-outlet>
