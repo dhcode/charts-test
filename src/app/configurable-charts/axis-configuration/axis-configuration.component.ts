@@ -94,13 +94,15 @@ export class AxisConfigurationComponent implements OnInit {
     const dialogRef = this.dialog.open(TraceOptionsDialogComponent, {
       data: {
         optionsDef: this.axisInfo.traceOptionsDef,
-        options: trace.options
+        options: trace.options,
+        label: trace.label
       },
       minWidth: 300
     });
-    dialogRef.afterClosed().subscribe(traceOptions => {
-      if (traceOptions) {
-        trace.options = traceOptions;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        trace.label = result.label;
+        trace.options = result.options;
         this.notifyChange();
       }
     });
