@@ -1,5 +1,5 @@
 import { getValueByPath } from '../chart-type-utils';
-import { AxisInfo, ChartType, ChartTypeConfigurer} from '../models/chart-types';
+import { AxisInfo, ChartType, ChartTypeConfigurer } from '../models/chart-types';
 import { getFormatter } from '../chart-data-formatters';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 import { colorOpt, createDefaultOptions, stringOpt } from '../chart-option-utils';
@@ -145,10 +145,14 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
         name: trace.label,
         type: trace.type || 'scatter',
         mode: trace.options.mode || options.mode,
-        yaxis: axisId
+        yaxis: axisId,
+        line: {}
       };
       if (axis.format === 'boolean') {
-        chartTrace['line'] = {shape: 'hv'};
+        chartTrace.line['shape']  = 'hv';
+      }
+      if (trace.options.color) {
+        chartTrace.line['color'] = trace.options.color;
       }
       return chartTrace;
     });

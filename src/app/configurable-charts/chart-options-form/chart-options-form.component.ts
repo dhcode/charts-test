@@ -1,19 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ChartOption, ChartOptionValues} from '../lib/models/chart-options';
-import {FormControl, FormGroup} from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChartOption, ChartOptionValues } from '../lib/models/chart-options';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chart-options-form',
   templateUrl: './chart-options-form.component.html',
   styleUrls: ['./chart-options-form.component.scss']
 })
-export class ChartOptionsFormComponent implements OnInit {
+export class ChartOptionsFormComponent implements OnInit, OnDestroy {
 
   _options: ChartOption[] = [];
   _values: ChartOptionValues;
   @Output() valuesChange = new EventEmitter<ChartOptionValues>();
 
   form: FormGroup;
+
+  private destroy = new Subject();
 
   constructor() {
   }
@@ -34,9 +38,13 @@ export class ChartOptionsFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form.valueChanges.subscribe(change => {
+    this.form.valueChanges.pipe(takeUntil(this.destroy)).subscribe(change => {
       this.valuesChange.next(change);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.complete();
   }
 
   createForm() {
@@ -50,6 +58,12 @@ export class ChartOptionsFormComponent implements OnInit {
 
     this.form = new FormGroup(formControls);
 
+  }
+
+  toggleValue(name: string, active: boolean) {
+    if (!active) {
+      this.form.get(name).setValue(null);
+    }
   }
 
 }

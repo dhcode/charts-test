@@ -1,1 +1,10 @@
-<app-chart-options-form [options]="dialogData.optionsDef" [values]="dialogData.options"></app-chart-options-form>
+<h2 mat-dialog-title>Trace options</h2>
+<mat-dialog-content>
+
+  <app-chart-options-form [options]="dialogData.optionsDef" [values]="dialogData.options" (valuesChange)="updateValues($event)"></app-chart-options-form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="save()">Save</button>
+</mat-dialog-actions>

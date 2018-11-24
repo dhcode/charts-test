@@ -17,7 +17,7 @@ import {
   MatLineModule,
   MatListModule,
   MatMenuModule,
-  MatSelectModule
+  MatSelectModule, MatSlideToggleModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartConfigurationComponent } from './chart-configuration/chart-configuration.component';
@@ -44,7 +44,8 @@ import { TraceOptionsDialogComponent } from './axis-configuration/trace-options-
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatSlideToggleModule
   ],
   declarations: [
     PathSelectorComponent,
