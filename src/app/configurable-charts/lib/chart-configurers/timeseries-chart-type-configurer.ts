@@ -115,6 +115,7 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       yaxis: {
         ...getFormatter(yAxis).getOutputTickOptions(yAxis.formatOptions),
         title: yAxis.label,
+        fixedrange: true
       },
     };
 
@@ -123,7 +124,8 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
         ...getFormatter(y2Axis).getOutputTickOptions(y2Axis.formatOptions),
         title: y2Axis.label,
         side: 'right',
-        overlaying: 'y'
+        overlaying: 'y',
+        fixedrange: true
       };
     }
 
