@@ -44,7 +44,8 @@ export class ChartConfigurationComponent implements OnInit, OnChanges {
       console.log('updateChartType', type);
       const configurer = this.chartTypes.find(c => c.type === type);
       const config: ChartConfig = {
-        ...this.config, type: type,
+        ...this.config,
+        type: type,
         axes: configurer.getDefaultAxes(),
         chartOptions: configurer.getDefaultOptions()
       };

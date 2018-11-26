@@ -4,6 +4,7 @@ import { getFormatter } from '../chart-data-formatters';
 import { getValueByPath } from '../chart-type-utils';
 import { ChartOption, ChartOptionValues } from '../models/chart-options';
 import { colorOpt, stringOpt } from '../chart-option-utils';
+import { getDefaultFormatOptions } from '../chart-config-utils';
 
 const dataTraceOptions: ChartOption[] = [
   colorOpt('color', 'Color', null),
@@ -42,13 +43,13 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
       traces: [],
       label: '',
       format: 'string',
-      formatOptions: {}
+      formatOptions: getDefaultFormatOptions('string', [])
     };
     const yAxis: AxisConfig = {
       traces: [],
       label: '',
       format: 'number',
-      formatOptions: {}
+      formatOptions: getDefaultFormatOptions('number', [])
     };
     return {
       x: xAxis,

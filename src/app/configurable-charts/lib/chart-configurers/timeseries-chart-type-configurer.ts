@@ -4,6 +4,7 @@ import { getFormatter } from '../chart-data-formatters';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 import { colorOpt, createDefaultOptions, stringOpt } from '../chart-option-utils';
 import { ChartOption, ChartOptionValues, SelectionValue } from '../models/chart-options';
+import { getDefaultFormatOptions } from '../chart-config-utils';
 
 const modes: SelectionValue[] = [
   {value: 'lines', label: 'Lines'},
@@ -68,19 +69,19 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
       traces: [],
       label: '',
       format: 'datetime',
-      formatOptions: {}
+      formatOptions: getDefaultFormatOptions('datetime', [])
     };
     const yAxis: AxisConfig = {
       traces: [],
       label: '',
       format: 'number',
-      formatOptions: {}
+      formatOptions: getDefaultFormatOptions('number', [])
     };
     const y2Axis: AxisConfig = {
       traces: [],
       label: '',
       format: 'number',
-      formatOptions: {}
+      formatOptions: getDefaultFormatOptions('number', [])
     };
     return {
       x: xAxis,

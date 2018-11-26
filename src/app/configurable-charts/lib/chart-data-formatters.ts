@@ -100,7 +100,7 @@ export class NumberDataFormatter implements ChartDataFormatter {
     return {
       prefix: '',
       suffix: '',
-      format: hasDecimals ? ',.2f' : ',d',
+      format: !values.length || hasDecimals ? ',.2f' : ',d',
     };
   }
 
