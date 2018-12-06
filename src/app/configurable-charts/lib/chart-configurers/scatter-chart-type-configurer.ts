@@ -21,7 +21,7 @@ const modesWithDefault: SelectionValue[] = [
 
 const dataTraceOptions: ChartOption[] = [
   colorOpt('color', 'Color', null),
-  stringOpt('mode', 'Display mode', 'lines', modesWithDefault)
+  stringOpt('mode', 'Display mode', 'markers', modesWithDefault)
 ];
 
 
@@ -31,14 +31,14 @@ const axesInfo: AxisInfo[] = [
     label: 'X - Axis',
     required: true,
     maxTraces: 1,
-    allowedFormats: ['datetime'],
+    allowedFormats: ['datetime', 'number', 'boolean'],
   },
   {
     id: 'y',
     label: 'Y - Axis',
     required: true,
     maxTraces: 10,
-    allowedFormats: ['number', 'boolean'],
+    allowedFormats: ['datetime', 'number', 'boolean'],
     traceOptionsDef: dataTraceOptions
   },
   {
@@ -46,18 +46,18 @@ const axesInfo: AxisInfo[] = [
     label: 'Y2 - Axis',
     required: false,
     maxTraces: 10,
-    allowedFormats: ['number', 'boolean'],
+    allowedFormats: ['datetime', 'number', 'boolean'],
     traceOptionsDef: dataTraceOptions
   }
 ];
 
 
-export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
-  type: ChartType = 'timeseries';
-  label = 'Time series';
+export class ScatterChartTypeConfigurer implements ChartTypeConfigurer {
+  type: ChartType = 'scatter';
+  label = 'Scatter';
 
   optionsDef: ChartOption[] = [
-    stringOpt('mode', 'Display mode', 'lines', modes)
+    stringOpt('mode', 'Display mode', 'markers', modes)
   ];
 
   getAxesInfo(): AxisInfo[] {
@@ -68,8 +68,8 @@ export class TimeseriesChartTypeConfigurer implements ChartTypeConfigurer {
     const xAxis: AxisConfig = {
       traces: [],
       label: '',
-      format: 'datetime',
-      formatOptions: getDefaultFormatOptions('datetime', [])
+      format: 'number',
+      formatOptions: getDefaultFormatOptions('number', [])
     };
     const yAxis: AxisConfig = {
       traces: [],
