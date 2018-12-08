@@ -31,7 +31,8 @@
             ],
             "scripts": [],
             "lazyModules": [
-              "src/app/configurable-charts/configured-chart/plotly-chart/plotly-chart.module"
+              "src/app/configurable-charts/configured-chart/plotly-chart/plotly-chart.module",
+              "src/app/dynamic-charts/dyn-chart/dyn-chart-plotly-basic/dyn-chart-plotly-basic.module"
             ]
           },
           "configurations": {
