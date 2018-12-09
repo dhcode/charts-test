@@ -21,7 +21,7 @@ export class DynChartPlotlyBasicService {
 
   getPlotlyConfig(): Observable<PlotlyConfigChange> {
     let currentConfig = null;
-    let currentData = null;
+    let currentData: any[] = null;
 
     return combineLatest(this.chartService.config, this.chartService.data).pipe(
       switchMap(([config, data]) => {
@@ -29,6 +29,9 @@ export class DynChartPlotlyBasicService {
         if (config !== currentConfig) {
           currentConfig = config;
           events.push(this.buildChartConfig(config));
+          if (currentData && data === currentData) {
+            events.push(this.buildChartData(config, currentData, true));
+          }
         }
         if (data !== currentData) {
           currentData = data;

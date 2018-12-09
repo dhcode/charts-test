@@ -6,32 +6,36 @@ export class DynChartConfigPlotly extends DynChartConfig {
   type: DynChartType = 'plotly-basic';
 
   xAxis = {
-    tickformat: ',.2f',
+    tickformat: '',
     title: ''
   };
 
   yAxis = {
-    tickformat: ',.2f',
+    tickformat: '',
     title: ''
   };
 
   constructor(props: any) {
     super(props);
     assignWithDefaults(this, props, {
-      xAxis: source => source.map(s => assignWithDefaults(this.xAxis, s)),
-      yAxis: source => source.map(s => assignWithDefaults(this.yAxis, s))
+      xAxis: source => assignWithDefaults(this.xAxis, source),
+      yAxis: source => assignWithDefaults(this.yAxis, source)
     });
   }
 
   toConfig(ctx: ConfigurationContext): any {
     const layout = {
       height: this.height,
-      xAxis: this.xAxis,
-      yAxis: this.yAxis
+      xaxis: this.xAxis,
+      yaxis: this.yAxis
     };
+    const data = [];
+    for (const trace of this.traces) {
+      data.push(trace.toInitialConfig(ctx));
+    }
     return {
       layout: layout,
-      data: []
+      data: data
     };
   }
 }

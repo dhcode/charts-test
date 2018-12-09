@@ -1,0 +1,16 @@
+<mat-form-field>
+  <mat-select placeholder="X Axis data source" [(ngModel)]="_trace.xDataPath" (ngModelChange)="notifyChange()">
+    <mat-option *ngFor="let path of paths" [value]="path.path">
+      {{path.path}} <span class="muted-text">({{path.types.join(', ')}})</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+&nbsp;
+<mat-form-field>
+  <mat-select placeholder="Y Axis data source" [(ngModel)]="_trace.yDataPath" (ngModelChange)="notifyChange()">
+    <mat-option *ngFor="let path of paths" [value]="path.path">
+      {{path.path}} <span class="muted-text">({{path.types.join(', ')}})</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

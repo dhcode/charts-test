@@ -25,6 +25,7 @@ export class DynChartService {
 
   updateConfig(config: DynChartConfig) {
     this.config.next(config);
+    console.log('updateConfig', config);
   }
 
   updateData(data: any[]) {

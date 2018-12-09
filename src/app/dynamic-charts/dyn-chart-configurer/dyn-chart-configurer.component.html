@@ -1,3 +1,36 @@
-<p>
-  dyn-chart-configurer works!
-</p>
+<div>
+  <span>
+    Chart
+  </span>
+
+  <button mat-stroked-button>X Axis</button>
+
+  <button mat-stroked-button>Y Axis</button>
+
+  <button mat-stroked-button [matMenuTriggerFor]="addMenu">Add trace</button>
+  <mat-menu #addMenu="matMenu">
+    <button mat-menu-item (click)="addTrace('scatter')">Scatter chart</button>
+    <button mat-menu-item (click)="addTrace('bar')">Bar chart</button>
+  </mat-menu>
+
+</div>
+
+Traces
+<div *ngFor="let trace of _config.traces">
+  <span style="padding-right: 10px">{{trace.type}}</span>
+
+  <ng-container *ngIf="trace.type === 'scatter'">
+    <app-scatter-trace-configurer [trace]="trace" [paths]="paths" (traceChange)="updateTrace(trace, $event)"></app-scatter-trace-configurer>
+  </ng-container>
+
+  <button mat-icon-button [matMenuTriggerFor]="traceMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #traceMenu="matMenu">
+    <button mat-menu-item (click)="removeTrace(trace)">
+      <mat-icon>remove</mat-icon>
+      <span>Remove</span>
+    </button>
+  </mat-menu>
+
+</div>

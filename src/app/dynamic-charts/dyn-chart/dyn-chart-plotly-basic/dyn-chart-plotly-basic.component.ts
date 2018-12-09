@@ -8,6 +8,7 @@ import { DynChartPlotlyBasicService } from './dyn-chart-plotly-basic.service';
   selector: 'app-dyn-chart-plotly-basic',
   templateUrl: './dyn-chart-plotly-basic.component.html',
   styleUrls: ['./dyn-chart-plotly-basic.component.scss'],
+  providers: [DynChartPlotlyBasicService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynChartPlotlyBasicComponent implements AfterViewInit, OnDestroy {
@@ -30,6 +31,8 @@ export class DynChartPlotlyBasicComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.plotlyService.getPlotlyConfig().pipe(takeUntil(this.destroy)).subscribe(configChange => {
+      this.error = null;
+      console.log('configChange', configChange);
       try {
         if (configChange.type === 'react') {
           this.chart = Plotly.react(this.chartContainer.nativeElement, configChange.data, configChange.layout);

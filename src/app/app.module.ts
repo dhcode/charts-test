@@ -5,7 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigurableChartsModule } from './configurable-charts/configurable-charts.module';
-import { MatButtonToggleModule } from '@angular/material';
+import { MatButtonToggleModule, MatTabsModule } from '@angular/material';
+import { DynChartConfigurerModule } from './dynamic-charts/dyn-chart-configurer/dyn-chart-configurer.module';
+import { DynamicChartsModule } from './dynamic-charts/dynamic-charts.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,10 @@ import { MatButtonToggleModule } from '@angular/material';
     BrowserAnimationsModule,
     AppRoutingModule,
     ConfigurableChartsModule,
-    MatButtonToggleModule
+    DynChartConfigurerModule,
+    DynamicChartsModule,
+    MatButtonToggleModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -86,7 +86,7 @@ export class DynChartComponent implements OnDestroy, OnChanges {
   }
 
   initChartModule() {
-    if (this.initializedType === this.config.type && this.chartRef) {
+    if (!this.config || this.initializedType === this.config.type && this.chartRef) {
       return;
     }
     this.initializedType = this.config.type;
