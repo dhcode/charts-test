@@ -15,6 +15,9 @@
     <app-dyn-chart-configurer [data]="data" [(config)]="chartConfig"></app-dyn-chart-configurer>
     <app-dyn-chart [data]="data" [config]="chartConfig"></app-dyn-chart>
   </mat-tab>
+  <mat-tab label="Data selection">
+    <app-options-configuration-form [options]="optionsDemo"></app-options-configuration-form>
+  </mat-tab>
 </mat-tab-group>
 
 

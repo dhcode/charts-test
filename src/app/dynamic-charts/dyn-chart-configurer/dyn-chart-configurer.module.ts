@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DynChartConfigurerComponent } from './dyn-chart-configurer.component';
 import {
   MatButtonModule,
-  MatButtonToggleModule,
+  MatButtonToggleModule, MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
   MatMenuModule,
-  MatSelectModule
+  MatSelectModule, MatTabsModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ScatterTraceConfigurerComponent } from './scatter-trace-configurer/scatter-trace-configurer.component';
@@ -21,7 +21,9 @@ import { ScatterTraceConfigurerComponent } from './scatter-trace-configurer/scat
     MatMenuModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    MatExpansionModule,
+    MatTabsModule
   ],
   declarations: [
     DynChartConfigurerComponent,

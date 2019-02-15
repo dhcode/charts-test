@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { ChartOption, ChartOptionValues } from '../../lib/models/chart-options';
-import { stringOpt } from '../../lib/chart-option-utils';
+import { OptionDefinition, OptionValues } from '../../../options-configuration/lib/options.model';
+import { stringOpt } from '../../../options-configuration/lib/option-utils';
 
 @Component({
   selector: 'app-trace-options-dialog',
@@ -10,14 +10,14 @@ import { stringOpt } from '../../lib/chart-option-utils';
 })
 export class TraceOptionsDialogComponent implements OnInit {
 
-  valuesIn: ChartOptionValues;
+  valuesIn: OptionValues;
 
-  private values: ChartOptionValues;
+  private values: OptionValues;
 
-  optionsDef: ChartOption[];
+  optionsDef: OptionDefinition[];
 
   constructor(public dialogRef: MatDialogRef<TraceOptionsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public dialogData: { optionsDef: ChartOption[], options: ChartOption[], label: string }) {
+              @Inject(MAT_DIALOG_DATA) public dialogData: { optionsDef: OptionDefinition[], options: OptionDefinition[], label: string }) {
     this.optionsDef = [
       stringOpt('_label', 'Label'),
       ...dialogData.optionsDef
@@ -31,7 +31,7 @@ export class TraceOptionsDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  updateValues(options: ChartOptionValues) {
+  updateValues(options: OptionValues) {
     this.values = options;
   }
 

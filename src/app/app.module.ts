@@ -8,6 +8,8 @@ import { ConfigurableChartsModule } from './configurable-charts/configurable-cha
 import { MatButtonToggleModule, MatTabsModule } from '@angular/material';
 import { DynChartConfigurerModule } from './dynamic-charts/dyn-chart-configurer/dyn-chart-configurer.module';
 import { DynamicChartsModule } from './dynamic-charts/dynamic-charts.module';
+import { DataSelectionModule } from './data-selection/data-selection.module';
+import { OptionsConfigurationModule } from './options-configuration/options-configuration.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { DynamicChartsModule } from './dynamic-charts/dynamic-charts.module';
     DynChartConfigurerModule,
     DynamicChartsModule,
     MatButtonToggleModule,
-    MatTabsModule
+    MatTabsModule,
+    DataSelectionModule,
+    OptionsConfigurationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

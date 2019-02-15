@@ -1,13 +1,94 @@
+
+<mat-tab-group>
+  <mat-tab  *ngFor="let trace of _config.traces" [label]="trace.type">
+    <ng-container *ngIf="trace.type === 'scatter'">
+      <app-scatter-trace-configurer [trace]="trace" [paths]="paths" (traceChange)="updateTrace(trace, $event)"></app-scatter-trace-configurer>
+    </ng-container>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="removeTrace(trace)">Remove Trace</button>
+    </mat-action-row>
+  </mat-tab>
+  <mat-tab label="X Axis Config">
+    Config TBD
+  </mat-tab>
+  <mat-tab label="Y Axis Config">
+    Config TBD
+  </mat-tab>
+</mat-tab-group>
+
+<button mat-stroked-button [matMenuTriggerFor]="addMenu">
+  <mat-icon>add</mat-icon>
+  Add trace
+</button>
+<mat-menu #addMenu="matMenu">
+  <button mat-menu-item (click)="addTrace('scatter')">Scatter chart</button>
+  <button mat-menu-item (click)="addTrace('bar')">Bar chart</button>
+</mat-menu>
+
+<mat-accordion>
+
+  <mat-expansion-panel *ngFor="let trace of _config.traces">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{trace.type}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngIf="trace.type === 'scatter'">
+      <app-scatter-trace-configurer [trace]="trace" [paths]="paths" (traceChange)="updateTrace(trace, $event)"></app-scatter-trace-configurer>
+    </ng-container>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="removeTrace(trace)">Remove Trace</button>
+    </mat-action-row>
+
+  </mat-expansion-panel>
+
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        X Axis Configuration
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    Config TBD
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Y Axis Configuration
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    Config TBD
+
+  </mat-expansion-panel>
+
+</mat-accordion>
+
 <div>
   <span>
     Chart
   </span>
 
-  <button mat-stroked-button>X Axis</button>
+  <button mat-stroked-button>
+    <mat-icon>arrow_forward</mat-icon>
+    X Axis
+  </button>
 
-  <button mat-stroked-button>Y Axis</button>
+  <button mat-stroked-button>
+    <mat-icon>arrow_upward</mat-icon>
+    Y Axis
+  </button>
 
-  <button mat-stroked-button [matMenuTriggerFor]="addMenu">Add trace</button>
+  <button mat-stroked-button [matMenuTriggerFor]="addMenu">
+    <mat-icon>add</mat-icon>
+    Add trace
+  </button>
   <mat-menu #addMenu="matMenu">
     <button mat-menu-item (click)="addTrace('scatter')">Scatter chart</button>
     <button mat-menu-item (click)="addTrace('bar')">Bar chart</button>

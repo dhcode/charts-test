@@ -1,6 +1,6 @@
 import { AxesConfig } from './chart-config';
 import { OutputFormat } from './data-formatter';
-import { ChartOption, ChartOptionValues } from './chart-options';
+import { OptionDefinition, OptionValues } from '../../../options-configuration/lib/options.model';
 
 export type ChartType = 'timeseries' | 'line' | 'gauge' | 'spline' | 'step' | 'bar' | 'scatter' | 'pie' | 'donut';
 
@@ -17,7 +17,7 @@ export interface ChartTypeConfigurer {
   /**
    * Options definition for the whole chart
    */
-  optionsDef?: ChartOption[];
+  optionsDef?: OptionDefinition[];
 
   /**
    * Information about the available axes
@@ -32,17 +32,17 @@ export interface ChartTypeConfigurer {
   /**
    * Generate the default options for this chart type
    */
-  getDefaultOptions(): ChartOptionValues;
+  getDefaultOptions(): OptionValues;
 
   /**
    * Create the config for the chart library
    */
-  createConfig(axes: AxesConfig, options: ChartOptionValues): any;
+  createConfig(axes: AxesConfig, options: OptionValues): any;
 
   /**
    * Creates the data to load in the chart
    */
-  createDataConfig(axes: AxesConfig, options: ChartOptionValues, data: any[]): any;
+  createDataConfig(axes: AxesConfig, options: OptionValues, data: any[]): any;
 }
 
 export interface AxisInfo {
@@ -69,12 +69,12 @@ export interface AxisInfo {
   /**
    * The options the user can choose for the axis
    */
-  optionsDef?: ChartOption[];
+  optionsDef?: OptionDefinition[];
 
   /**
    * Options for each trace
    */
-  traceOptionsDef?: ChartOption[];
+  traceOptionsDef?: OptionDefinition[];
 
 }
 

@@ -1,6 +1,6 @@
 import { ChartType} from './chart-types';
 import { OutputFormat, OutputFormatOptions } from './data-formatter';
-import { ChartOptionValues } from './chart-options';
+import { OptionValues } from '../../../options-configuration/lib/options.model';
 
 /**
  * Savable chart configuration
@@ -20,7 +20,7 @@ export interface ChartConfig {
   /**
    * Chart type specific configuration options
    */
-  chartOptions: ChartOptionValues;
+  chartOptions: OptionValues;
 }
 
 export interface AxesConfig {
@@ -67,5 +67,5 @@ export interface TraceConfig {
   /**
    * Custom options for the trace
    */
-  options: ChartOptionValues;
+  options: OptionValues;
 }

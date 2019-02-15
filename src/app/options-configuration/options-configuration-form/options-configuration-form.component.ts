@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { OptionDefinition, OptionValues } from '../../options-configuration/lib/options.model';
+import { OptionDefinition, OptionValues } from '../lib/options.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-chart-options-form',
-  templateUrl: './chart-options-form.component.html',
-  styleUrls: ['./chart-options-form.component.scss']
+  selector: 'app-options-configuration-form',
+  templateUrl: './options-configuration-form.component.html',
+  styleUrls: ['./options-configuration-form.component.scss']
 })
-export class ChartOptionsFormComponent implements OnInit, OnDestroy {
+export class OptionsConfigurationFormComponent implements OnInit, OnDestroy {
 
   _options: OptionDefinition[] = [];
   _values: OptionValues;
@@ -58,6 +58,8 @@ export class ChartOptionsFormComponent implements OnInit, OnDestroy {
 
     this.form = new FormGroup(formControls);
 
+    console.log('create form', this.form);
+
   }
 
   toggleValue(name: string, active: boolean) {
@@ -65,5 +67,6 @@ export class ChartOptionsFormComponent implements OnInit, OnDestroy {
       this.form.get(name).setValue(null);
     }
   }
+
 
 }

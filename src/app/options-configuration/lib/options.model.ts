@@ -1,10 +1,10 @@
-export type ChartOptionType = 'int' | 'string' | 'decimal' | 'boolean' | 'color';
+export type OptionType = 'int' | 'string' | 'decimal' | 'boolean' | 'color';
 
-export interface ChartOptionValues {
+export interface OptionValues {
   [key: string]: any;
 }
 
-export interface ChartOption {
+export interface OptionDefinition {
   /**
    * Technical name of the option
    */
@@ -20,7 +20,7 @@ export interface ChartOption {
   /**
    * The type decided how the options input is presented
    */
-  type: ChartOptionType;
+  type: OptionType;
   /**
    * If there are only some values to select from
    */

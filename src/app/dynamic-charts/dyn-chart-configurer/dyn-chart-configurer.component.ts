@@ -19,6 +19,8 @@ export class DynChartConfigurerComponent implements OnInit, OnChanges {
 
   paths: PathInfo[] = [];
 
+  activeTab = 'xAxis';
+
   constructor() {
   }
 

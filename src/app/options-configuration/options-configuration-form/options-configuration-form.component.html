@@ -1,0 +1,49 @@
+<form [formGroup]="form">
+
+  <div *ngFor="let option of _options">
+    <ng-container *ngIf="option.selectionValues && option.selectionValues.length; else: directInput">
+      <mat-form-field class="w-100">
+        <mat-select [placeholder]="option.label" [formControlName]="option.name">
+          <ng-container *ngFor="let opt of option.selectionValues">
+            <ng-container *ngIf="opt.hasOwnProperty('value') && opt.hasOwnProperty('label'); else: simple">
+              <mat-option [value]="opt.value">
+                {{opt.label}}
+              </mat-option>
+            </ng-container>
+            <ng-template #simple>
+              <mat-option [value]="opt">
+                {{opt}}
+              </mat-option>
+            </ng-template>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-template #directInput>
+      <ng-container *ngIf="option.type === 'string'">
+        <mat-form-field class="w-100">
+          <input matInput [placeholder]="option.label" [formControlName]="option.name">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="option.type === 'int' || option.type === 'decimal'">
+        <mat-form-field class="w-100">
+          <input matInput [placeholder]="option.label" [formControlName]="option.name" type="number">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="option.type === 'color'">
+        <div style="display: flex; vertical-align:center">
+          <mat-slide-toggle [checked]="form.get(option.name).value" (change)="toggleValue(option.name, $event.checked)" #toggle="matSlideToggle"></mat-slide-toggle>
+          <mat-form-field *ngIf="toggle.checked">
+            <input matInput [placeholder]="option.label" [formControlName]="option.name" type="color">
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="option.type === 'boolean'">
+        <mat-checkbox [formControlName]="option.name">{{option.label}}</mat-checkbox>
+      </ng-container>
+    </ng-template>
+
+
+  </div>
+
+</form>

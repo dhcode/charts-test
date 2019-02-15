@@ -1,4 +1,5 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
+import { booleanOpt, colorOpt, decimalOpt, integerOpt, OptionDefinition, stringOpt } from './options-configuration';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,14 @@ export class AppComponent implements OnInit, DoCheck {
     ],
     layout: {autosize: true, title: 'A Fancy Plot'}
   };
+
+  optionsDemo: OptionDefinition[] = [
+    stringOpt('name', 'Name'),
+    booleanOpt('active', 'Active'),
+    decimalOpt('decimal', 'Decimal'),
+    integerOpt('integer', 'Integer'),
+    colorOpt('color', 'Color')
+  ];
 
   ngOnInit(): void {
     console.log('generated data', this.data);

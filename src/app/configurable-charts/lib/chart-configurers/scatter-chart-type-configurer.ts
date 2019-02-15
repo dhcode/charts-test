@@ -2,8 +2,8 @@ import { getValueByPath } from '../chart-type-utils';
 import { AxisInfo, ChartType, ChartTypeConfigurer } from '../models/chart-types';
 import { getFormatter } from '../chart-data-formatters';
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
-import { colorOpt, createDefaultOptions, stringOpt } from '../chart-option-utils';
-import { ChartOption, ChartOptionValues, SelectionValue } from '../models/chart-options';
+import { colorOpt, createDefaultOptions, stringOpt } from '../../../options-configuration/lib/option-utils';
+import { OptionDefinition, OptionValues, SelectionValue } from '../../../options-configuration/lib/options.model';
 import { getDefaultFormatOptions } from '../chart-config-utils';
 
 const modes: SelectionValue[] = [
@@ -19,7 +19,7 @@ const modesWithDefault: SelectionValue[] = [
   ...modes
 ];
 
-const dataTraceOptions: ChartOption[] = [
+const dataTraceOptions: OptionDefinition[] = [
   colorOpt('color', 'Color', null),
   stringOpt('mode', 'Display mode', 'markers', modesWithDefault)
 ];
@@ -56,7 +56,7 @@ export class ScatterChartTypeConfigurer implements ChartTypeConfigurer {
   type: ChartType = 'scatter';
   label = 'Scatter';
 
-  optionsDef: ChartOption[] = [
+  optionsDef: OptionDefinition[] = [
     stringOpt('mode', 'Display mode', 'markers', modes)
   ];
 
@@ -90,11 +90,11 @@ export class ScatterChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  getDefaultOptions(): ChartOptionValues {
+  getDefaultOptions(): OptionValues {
     return createDefaultOptions(this.optionsDef);
   }
 
-  createConfig(axes: AxesConfig, options: ChartOptionValues): any {
+  createConfig(axes: AxesConfig, options: OptionValues): any {
     const xAxis: AxisConfig = axes.x;
     const yAxis: AxisConfig = axes.y;
     const y2Axis: AxisConfig = axes.y2;
@@ -140,7 +140,7 @@ export class ScatterChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  private getTraces(axisId: string, axis: AxisConfig, options: ChartOptionValues): any[] {
+  private getTraces(axisId: string, axis: AxisConfig, options: OptionValues): any[] {
     return axis.traces.map(trace => {
       const chartTrace = {
         x: [],
@@ -161,7 +161,7 @@ export class ScatterChartTypeConfigurer implements ChartTypeConfigurer {
     });
   }
 
-  createDataConfig(axes: AxesConfig, options: ChartOptionValues, sourceData: any[]): any {
+  createDataConfig(axes: AxesConfig, options: OptionValues, sourceData: any[]): any {
     const indices = [];
     const data = {
       x: [],

@@ -2,11 +2,11 @@ import { AxisInfo, ChartType, ChartTypeConfigurer } from '../models/chart-types'
 import { AxesConfig, AxisConfig, TraceConfig } from '../models/chart-config';
 import { getFormatter } from '../chart-data-formatters';
 import { getValueByPath } from '../chart-type-utils';
-import { ChartOption, ChartOptionValues } from '../models/chart-options';
-import { colorOpt, stringOpt } from '../chart-option-utils';
+import { OptionDefinition, OptionValues } from '../../../options-configuration/lib/options.model';
+import { colorOpt, stringOpt } from '../../../options-configuration/lib/option-utils';
 import { getDefaultFormatOptions } from '../chart-config-utils';
 
-const dataTraceOptions: ChartOption[] = [
+const dataTraceOptions: OptionDefinition[] = [
   colorOpt('color', 'Color', null),
 ];
 
@@ -57,11 +57,11 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  getDefaultOptions(): ChartOptionValues {
+  getDefaultOptions(): OptionValues {
     return {};
   }
 
-  createConfig(axes: AxesConfig, options: ChartOptionValues): any {
+  createConfig(axes: AxesConfig, options: OptionValues): any {
     const xAxis: AxisConfig = axes.x;
     const yAxis: AxisConfig = axes.y;
 
@@ -105,7 +105,7 @@ export class BarChartTypeConfigurer implements ChartTypeConfigurer {
     };
   }
 
-  createDataConfig(axes: AxesConfig, options: ChartOptionValues, sourceData: any[]): any {
+  createDataConfig(axes: AxesConfig, options: OptionValues, sourceData: any[]): any {
     const indices = [];
     const data = {
       x: [],
